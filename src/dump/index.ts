@@ -191,6 +191,7 @@ export async function runDump(baseUrl: string): Promise<void> {
         enableAllFolders: user.Policy?.EnableAllFolders,
         enableCollectionManagement: user.Policy?.EnableCollectionManagement,
         maxActiveSessions: user.Policy?.MaxActiveSessions,
+        remoteClientBitrateLimit: user.Policy?.RemoteClientBitrateLimit,
         enabledLibraries: resolveEnabledFolders(user.Policy?.EnabledFolders),
       },
       displayMissingEpisodes: user.Configuration?.DisplayMissingEpisodes,

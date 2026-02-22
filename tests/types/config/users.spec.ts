@@ -383,6 +383,7 @@ describe("UserPolicyConfig", () => {
       enableAllFolders: true,
       enableCollectionManagement: false,
       enabledLibraries: ["Movies", "TV Shows"],
+      remoteClientBitrateLimit: 5_000_000,
     };
 
     // Act
@@ -402,6 +403,7 @@ describe("UserPolicyConfig", () => {
       { isAdministrator: true },
       { isAdministrator: false },
       { loginAttemptsBeforeLockout: 10 },
+      { remoteClientBitrateLimit: 1_500_000 },
     ];
 
     validConfigs.forEach(

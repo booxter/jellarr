@@ -170,6 +170,23 @@ in [
       }
     ])
 
+  (assertEq "policy remoteClientBitrateLimit only" (mkUsersConfig [
+      {
+        name = "user";
+        password = "pass";
+        passwordFile = null;
+        policy = {
+          remoteClientBitrateLimit = 10000000;
+        };
+      }
+    ]) [
+      {
+        name = "user";
+        password = "pass";
+        policy = {remoteClientBitrateLimit = 10000000;};
+      }
+    ])
+
   (assertEq "policy enableAllFolders only" (mkUsersConfig [
       {
         name = "user";

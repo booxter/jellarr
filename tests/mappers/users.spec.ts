@@ -252,6 +252,7 @@ describe("mappers/users", () => {
         isAdministrator: true,
         loginAttemptsBeforeLockout: 5,
         maxActiveSessions: 2,
+        remoteClientBitrateLimit: 2_000_000,
         enableAllFolders: true,
         enableCollectionManagement: false,
       };
@@ -265,6 +266,7 @@ describe("mappers/users", () => {
         IsAdministrator: true,
         LoginAttemptsBeforeLockout: 5,
         MaxActiveSessions: 2,
+        RemoteClientBitrateLimit: 2_000_000,
         EnableAllFolders: true,
         EnableCollectionManagement: false,
       });
@@ -291,6 +293,10 @@ describe("mappers/users", () => {
         {
           config: { maxActiveSessions: 4 },
           expected: { MaxActiveSessions: 4 },
+        },
+        {
+          config: { remoteClientBitrateLimit: 3_500_000 },
+          expected: { RemoteClientBitrateLimit: 3_500_000 },
         },
       ];
 
