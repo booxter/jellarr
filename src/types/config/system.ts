@@ -30,12 +30,14 @@ export const SystemConfigType: z.ZodObject<{
   pluginRepositories: z.ZodOptional<
     z.ZodArray<typeof PluginRepositoryConfigType>
   >;
+  knownProxies: z.ZodOptional<z.ZodArray<z.ZodString>>;
   trickplayOptions: z.ZodOptional<typeof TrickplayOptionsConfigType>;
 }> = z
   .object({
     serverName: z.string().min(1).optional(),
     enableMetrics: z.boolean().optional(),
     pluginRepositories: z.array(PluginRepositoryConfigType).optional(),
+    knownProxies: z.array(z.string().min(1)).optional(),
     trickplayOptions: TrickplayOptionsConfigType.optional(),
   })
   .strict();

@@ -1,6 +1,7 @@
 import { promises as fs } from "fs";
 import YAML from "yaml";
 import { calculateSystemDiff, applySystem } from "../apply/system";
+import { calculateNetworkDiff, applyNetwork } from "../apply/network";
 import {
   calculateEncodingDiff,
   applyEncoding,
@@ -24,6 +25,7 @@ import {
 } from "../apply/users";
 import type { VirtualFolderInfoSchema } from "../types/schema/library";
 import { type ServerConfigurationSchema } from "../types/schema/system";
+import { type NetworkConfigurationSchema } from "../types/schema/network";
 import { type EncodingOptionsSchema } from "../types/schema/encoding-options";
 import { type BrandingOptionsDtoSchema } from "../types/schema/branding-options";
 import type { UserDtoSchema, UserPolicySchema } from "../types/schema/users";
@@ -84,6 +86,26 @@ export async function runPipeline(path: string): Promise<void> {
     console.log("✓ updated system config");
   } else {
     console.log("✓ system config already up to date");
+  }
+
+  if (typeof cfg.system.knownProxies !== "undefined") {
+    const currentNetworkConfigurationSchema: NetworkConfigurationSchema =
+      await jellyfinClient.getNetworkConfiguration();
+
+    const updatedNetworkConfigurationSchema:
+      | NetworkConfigurationSchema
+      | undefined = calculateNetworkDiff(
+      currentNetworkConfigurationSchema,
+      cfg.system,
+    );
+
+    if (updatedNetworkConfigurationSchema) {
+      console.log("→ updating network config");
+      await applyNetwork(jellyfinClient, updatedNetworkConfigurationSchema);
+      console.log("✓ updated network config");
+    } else {
+      console.log("✓ network config already up to date");
+    }
   }
 
   if (cfg.encoding) {

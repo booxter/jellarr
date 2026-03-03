@@ -22,6 +22,7 @@
   nullSystemConfig = {
     enableMetrics = null;
     pluginRepositories = null;
+    knownProxies = null;
     trickplayOptions = null;
   };
 

@@ -4,6 +4,7 @@ import type {
   ServerConfigurationSchema,
   PluginRepositorySchema,
 } from "../types/schema/system";
+import type { NetworkConfigurationSchema } from "../types/schema/network";
 import type { EncodingOptionsSchema } from "../types/schema/encoding-options";
 import type {
   VirtualFolderInfoSchema,
@@ -34,6 +35,7 @@ export async function runDump(baseUrl: string): Promise<void> {
 
   const [
     systemConfig,
+    networkConfig,
     encodingConfig,
     virtualFolders,
     brandingConfig,
@@ -41,6 +43,7 @@ export async function runDump(baseUrl: string): Promise<void> {
     plugins,
   ]: [
     ServerConfigurationSchema,
+    NetworkConfigurationSchema,
     EncodingOptionsSchema,
     VirtualFolderInfoSchema[],
     BrandingOptionsDtoSchema,
@@ -48,6 +51,7 @@ export async function runDump(baseUrl: string): Promise<void> {
     PluginInfoSchema[],
   ] = await Promise.all([
     client.getSystemConfiguration(),
+    client.getNetworkConfiguration(),
     client.getEncodingConfiguration(),
     client.getVirtualFolders(),
     client.getBrandingConfiguration(),
@@ -111,6 +115,7 @@ export async function runDump(baseUrl: string): Promise<void> {
           enabled: repo.Enabled ?? false,
         }),
       ),
+      knownProxies: networkConfig.KnownProxies,
       trickplayOptions: {
         enableHwAcceleration:
           systemConfig.TrickplayOptions?.EnableHwAcceleration,

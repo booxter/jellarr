@@ -185,6 +185,21 @@ describe("mappers/system", () => {
       });
     });
 
+    it("should ignore knownProxies in system mapper", () => {
+      // Arrange
+      const config: SystemConfig = {
+        knownProxies: ["127.0.0.1", "10.0.0.1"],
+      };
+
+      // Act
+      const result: Partial<ServerConfigurationSchema> =
+        mapSystemConfigurationConfigToSchema(config);
+
+      // Assert
+      expect(result).toEqual({});
+      expect(result).not.toHaveProperty("KnownProxies");
+    });
+
     it("should map trickplayOptions to TrickplayOptions", () => {
       // Arrange
       const config: SystemConfig = {
