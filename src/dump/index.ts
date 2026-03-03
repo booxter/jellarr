@@ -115,13 +115,16 @@ export async function runDump(baseUrl: string): Promise<void> {
           enabled: repo.Enabled ?? false,
         }),
       ),
-      knownProxies: networkConfig.KnownProxies,
       trickplayOptions: {
         enableHwAcceleration:
           systemConfig.TrickplayOptions?.EnableHwAcceleration,
         enableHwEncoding: systemConfig.TrickplayOptions?.EnableHwEncoding,
         processThreads: systemConfig.TrickplayOptions?.ProcessThreads,
       },
+    },
+
+    network: {
+      knownProxies: networkConfig.KnownProxies,
     },
 
     encoding: {

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, type Mock } from "vitest";
 import { calculateNetworkDiff, applyNetwork } from "../../src/apply/network";
 import type { JellyfinClient } from "../../src/api/jellyfin.types";
-import type { SystemConfig } from "../../src/types/config/system";
+import type { NetworkConfig } from "../../src/types/config/network";
 import type { NetworkConfigurationSchema } from "../../src/types/schema/network";
 
 vi.mock("../../src/lib/logger", () => ({
@@ -23,7 +23,7 @@ describe("apply/network", () => {
         KnownProxies: ["127.0.0.1"],
       } as NetworkConfigurationSchema;
 
-      const desired: SystemConfig = {};
+      const desired: NetworkConfig = {};
 
       const result: NetworkConfigurationSchema | undefined =
         calculateNetworkDiff(current, desired);
@@ -36,7 +36,7 @@ describe("apply/network", () => {
         KnownProxies: ["10.0.0.1"],
       } as NetworkConfigurationSchema;
 
-      const desired: SystemConfig = {
+      const desired: NetworkConfig = {
         knownProxies: ["127.0.0.1", "10.0.0.2"],
       };
 
@@ -51,7 +51,7 @@ describe("apply/network", () => {
         KnownProxies: ["127.0.0.1"],
       } as NetworkConfigurationSchema;
 
-      const desired: SystemConfig = {
+      const desired: NetworkConfig = {
         knownProxies: [],
       };
 
@@ -66,7 +66,7 @@ describe("apply/network", () => {
         KnownProxies: ["127.0.0.1"],
       } as NetworkConfigurationSchema;
 
-      const desired: SystemConfig = {
+      const desired: NetworkConfig = {
         knownProxies: ["127.0.0.1"],
       };
 

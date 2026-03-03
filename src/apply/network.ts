@@ -1,14 +1,14 @@
 import { logger } from "../lib/logger";
 import type { JellyfinClient } from "../api/jellyfin.types";
 import { mapNetworkConfigurationConfigToSchema } from "../mappers/network";
-import type { SystemConfig } from "../types/config/system";
+import type { NetworkConfig } from "../types/config/network";
 import type { NetworkConfigurationSchema } from "../types/schema/network";
 import { applyChangeset, diff, type IChange } from "json-diff-ts";
 import { ChangeSetBuilder } from "../lib/changeset";
 
 export function calculateNetworkDiff(
   current: NetworkConfigurationSchema,
-  desired: SystemConfig,
+  desired: NetworkConfig,
 ): NetworkConfigurationSchema | undefined {
   if (typeof desired.knownProxies === "undefined") {
     return undefined;

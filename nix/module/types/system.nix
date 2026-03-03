@@ -57,11 +57,6 @@
         default = null;
         description = "List of plugin repositories.";
       };
-      knownProxies = mkOption {
-        type = nullOr (types.listOf types.str);
-        default = null;
-        description = "List of trusted reverse proxy IP addresses.";
-      };
       trickplayOptions = mkOption {
         type = nullOr trickplayOptionsConfigType;
         default = null;
@@ -96,9 +91,6 @@
           inherit (repo) name url enabled;
         })
       c.pluginRepositories;
-    }
-    // optionalAttrs (c ? knownProxies && c.knownProxies != null) {
-      inherit (c) knownProxies;
     }
     // optionalAttrs (c ? trickplayOptions && c.trickplayOptions != null) {
       trickplayOptions = mkTrickplayOptionsConfig c.trickplayOptions;

@@ -11,6 +11,7 @@
     version = 1;
     base_url = "http://10.0.0.76:8096";
     system = null;
+    network = null;
     encoding = null;
     library = null;
     branding = null;
@@ -22,7 +23,6 @@
   nullSystemConfig = {
     enableMetrics = null;
     pluginRepositories = null;
-    knownProxies = null;
     trickplayOptions = null;
   };
 

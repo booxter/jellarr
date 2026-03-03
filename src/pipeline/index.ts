@@ -88,7 +88,7 @@ export async function runPipeline(path: string): Promise<void> {
     console.log("✓ system config already up to date");
   }
 
-  if (typeof cfg.system.knownProxies !== "undefined") {
+  if (cfg.network && typeof cfg.network.knownProxies !== "undefined") {
     const currentNetworkConfigurationSchema: NetworkConfigurationSchema =
       await jellyfinClient.getNetworkConfiguration();
 
@@ -96,7 +96,7 @@ export async function runPipeline(path: string): Promise<void> {
       | NetworkConfigurationSchema
       | undefined = calculateNetworkDiff(
       currentNetworkConfigurationSchema,
-      cfg.system,
+      cfg.network,
     );
 
     if (updatedNetworkConfigurationSchema) {

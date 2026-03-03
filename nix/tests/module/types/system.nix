@@ -11,7 +11,6 @@
     serverName = null;
     enableMetrics = null;
     pluginRepositories = null;
-    knownProxies = null;
     trickplayOptions = null;
   };
 in [
@@ -38,9 +37,6 @@ in [
           enabled = true;
         }
       ];
-      knownProxies = [
-        "127.0.0.1"
-      ];
       trickplayOptions = {
         enableHwAcceleration = true;
         enableHwEncoding = false;
@@ -54,9 +50,6 @@ in [
           url = "https://repo.jellyfin.org/releases/plugin/manifest.json";
           enabled = true;
         }
-      ];
-      knownProxies = [
-        "127.0.0.1"
       ];
       trickplayOptions = {
         enableHwAcceleration = true;
@@ -123,26 +116,6 @@ in [
         }
       ];
     })))
-
-  (assertEq "single known proxy" (mkSystemConfig (nullConfig
-    // {
-      knownProxies = ["127.0.0.1"];
-    })) {
-    knownProxies = ["127.0.0.1"];
-  })
-
-  (assertEq "multiple known proxies" (mkSystemConfig (nullConfig
-    // {
-      knownProxies = [
-        "127.0.0.1"
-        "10.0.0.2"
-      ];
-    })) {
-    knownProxies = [
-      "127.0.0.1"
-      "10.0.0.2"
-    ];
-  })
 
   (assertEq "empty trickplay options" (mkSystemConfig (nullConfig
     // {

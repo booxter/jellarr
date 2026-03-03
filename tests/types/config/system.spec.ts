@@ -37,7 +37,6 @@ describe("SystemConfig", () => {
           enabled: true,
         },
       ],
-      knownProxies: ["127.0.0.1"],
       trickplayOptions: {
         enableHwAcceleration: true,
         enableHwEncoding: false,
@@ -246,29 +245,5 @@ describe("SystemConfigType", () => {
     if (result.success) {
       expect(result.data.serverName).toBe("MyServer");
     }
-  });
-
-  it("should allow knownProxies", () => {
-    const config: z.input<typeof SystemConfigType> = {
-      knownProxies: ["127.0.0.1", "10.0.0.1"],
-    };
-
-    const result = SystemConfigType.safeParse(config);
-
-    expect(result.success).toBe(true);
-    if (result.success) {
-      expect(result.data.knownProxies).toEqual(["127.0.0.1", "10.0.0.1"]);
-    }
-  });
-
-  it("should reject non-string knownProxies entries", () => {
-    const config: z.input<typeof SystemConfigType> = {
-      // @ts-expect-error intentional bad type for test
-      knownProxies: ["127.0.0.1", 1234],
-    };
-
-    const result = SystemConfigType.safeParse(config);
-
-    expect(result.success).toBe(false);
   });
 });

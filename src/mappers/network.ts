@@ -1,8 +1,8 @@
-import type { SystemConfig } from "../types/config/system";
+import type { NetworkConfig } from "../types/config/network";
 import type { NetworkConfigurationSchema } from "../types/schema/network";
 
 export function mapNetworkConfigurationConfigToSchema(
-  desired: SystemConfig,
+  desired: NetworkConfig,
 ): Partial<NetworkConfigurationSchema> {
   const out: Partial<NetworkConfigurationSchema> = {};
 

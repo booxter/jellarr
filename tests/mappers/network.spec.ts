@@ -1,12 +1,12 @@
 import { describe, it, expect } from "vitest";
 import { mapNetworkConfigurationConfigToSchema } from "../../src/mappers/network";
-import type { SystemConfig } from "../../src/types/config/system";
+import type { NetworkConfig } from "../../src/types/config/network";
 import type { NetworkConfigurationSchema } from "../../src/types/schema/network";
 
 describe("mappers/network", () => {
   describe("mapNetworkConfigurationConfigToSchema", () => {
     it("should map knownProxies to KnownProxies", () => {
-      const config: SystemConfig = {
+      const config: NetworkConfig = {
         knownProxies: ["127.0.0.1", "10.0.0.1"],
       };
 
@@ -19,7 +19,7 @@ describe("mappers/network", () => {
     });
 
     it("should map empty knownProxies to empty KnownProxies", () => {
-      const config: SystemConfig = {
+      const config: NetworkConfig = {
         knownProxies: [],
       };
 
@@ -32,7 +32,7 @@ describe("mappers/network", () => {
     });
 
     it("should not include KnownProxies when knownProxies is undefined", () => {
-      const config: SystemConfig = {};
+      const config: NetworkConfig = {};
 
       const result: Partial<NetworkConfigurationSchema> =
         mapNetworkConfigurationConfigToSchema(config);

@@ -8,6 +8,7 @@
     (import ./branding-options.nix testArgs)
     ++ (import ./encoding-options.nix testArgs)
     ++ (import ./library.nix testArgs)
+    ++ (import ./network.nix testArgs)
     ++ (import ./plugins.nix testArgs)
     ++ (import ./root.nix testArgs)
     ++ (import ./startup.nix testArgs)
