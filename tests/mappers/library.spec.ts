@@ -160,5 +160,21 @@ describe("mappers/library", () => {
       expect(result.LibraryOptions).toHaveProperty("PathInfos");
       expect(Array.isArray(result.LibraryOptions?.PathInfos)).toBe(true);
     });
+
+    it("should map saveLyricsWithMedia when configured", () => {
+      const config: VirtualFolderConfig = {
+        name: "Music",
+        collectionType: "music",
+        libraryOptions: {
+          pathInfos: [{ path: "/data/music" }],
+          saveLyricsWithMedia: true,
+        },
+      };
+
+      const result: Partial<VirtualFolderInfoSchema> =
+        mapVirtualFolderConfigToSchema(config);
+
+      expect(result.LibraryOptions?.SaveLyricsWithMedia).toBe(true);
+    });
   });
 });

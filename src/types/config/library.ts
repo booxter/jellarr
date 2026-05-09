@@ -36,6 +36,7 @@ export const VirtualFolderConfigType: z.ZodObject<{
     enableEmbeddedEpisodeInfos: z.ZodOptional<z.ZodBoolean>;
     enableEmbeddedExtraTitles: z.ZodOptional<z.ZodBoolean>;
     enableTrickplayImageExtraction: z.ZodOptional<z.ZodBoolean>;
+    saveLyricsWithMedia: z.ZodOptional<z.ZodBoolean>;
     saveTrickplayWithMedia: z.ZodOptional<z.ZodBoolean>;
     metadataSavers: z.ZodOptional<z.ZodArray<z.ZodString>>;
     saveLocalMetadata: z.ZodOptional<z.ZodBoolean>;
@@ -86,6 +87,7 @@ export const VirtualFolderConfigType: z.ZodObject<{
         enableEmbeddedEpisodeInfos: z.boolean().optional(),
         enableEmbeddedExtraTitles: z.boolean().optional(),
         enableTrickplayImageExtraction: z.boolean().optional(),
+        saveLyricsWithMedia: z.boolean().optional(),
         saveTrickplayWithMedia: z.boolean().optional(),
         metadataSavers: z.array(z.string().min(1)).optional(),
         saveLocalMetadata: z.boolean().optional(),

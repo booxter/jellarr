@@ -50,6 +50,7 @@ describe("types/config/library", () => {
           enableEmbeddedEpisodeInfos: true,
           enableEmbeddedExtraTitles: true,
           enableTrickplayImageExtraction: true,
+          saveLyricsWithMedia: true,
           saveTrickplayWithMedia: true,
           metadataSavers: ["Nfo"],
           saveLocalMetadata: true,
@@ -78,6 +79,7 @@ describe("types/config/library", () => {
       expect(parsed.libraryOptions.enableEmbeddedEpisodeInfos).toBe(true);
       expect(parsed.libraryOptions.enableEmbeddedExtraTitles).toBe(true);
       expect(parsed.libraryOptions.enableTrickplayImageExtraction).toBe(true);
+      expect(parsed.libraryOptions.saveLyricsWithMedia).toBe(true);
       expect(parsed.libraryOptions.saveTrickplayWithMedia).toBe(true);
       expect(parsed.libraryOptions.metadataSavers).toEqual(["Nfo"]);
       expect(parsed.libraryOptions.saveLocalMetadata).toBe(true);

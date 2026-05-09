@@ -80,6 +80,11 @@
         default = null;
         description = "Enable trickplay image extraction.";
       };
+      saveLyricsWithMedia = mkOption {
+        type = nullOr types.bool;
+        default = null;
+        description = "Save lyrics with media.";
+      };
       saveTrickplayWithMedia = mkOption {
         type = nullOr types.bool;
         default = null;
@@ -192,6 +197,9 @@
             }
             // optionalAttrs (lo ? enableTrickplayImageExtraction && lo.enableTrickplayImageExtraction != null) {
               inherit (lo) enableTrickplayImageExtraction;
+            }
+            // optionalAttrs (lo ? saveLyricsWithMedia && lo.saveLyricsWithMedia != null) {
+              inherit (lo) saveLyricsWithMedia;
             }
             // optionalAttrs (lo ? saveTrickplayWithMedia && lo.saveTrickplayWithMedia != null) {
               inherit (lo) saveTrickplayWithMedia;

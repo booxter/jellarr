@@ -50,6 +50,7 @@ export function mapVirtualFolderConfigToSchema(
         config.libraryOptions.enableEmbeddedExtraTitles,
       EnableTrickplayImageExtraction:
         config.libraryOptions.enableTrickplayImageExtraction,
+      SaveLyricsWithMedia: config.libraryOptions.saveLyricsWithMedia,
       SaveTrickplayWithMedia: config.libraryOptions.saveTrickplayWithMedia,
       MetadataSavers: config.libraryOptions.metadataSavers,
       SaveLocalMetadata: config.libraryOptions.saveLocalMetadata,

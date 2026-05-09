@@ -83,6 +83,30 @@ in [
       ];
     })
 
+  (assertEq "saveLyricsWithMedia option" (mkLibraryConfig {
+      virtualFolders = [
+        {
+          name = "Music";
+          collectionType = "music";
+          libraryOptions = {
+            pathInfos = [{path = "/data/music";}];
+            saveLyricsWithMedia = true;
+          };
+        }
+      ];
+    }) {
+      virtualFolders = [
+        {
+          name = "Music";
+          collectionType = "music";
+          libraryOptions = {
+            pathInfos = [{path = "/data/music";}];
+            saveLyricsWithMedia = true;
+          };
+        }
+      ];
+    })
+
   (assertEq "collectionType movies" (mkLibraryConfig {
       virtualFolders = [
         {

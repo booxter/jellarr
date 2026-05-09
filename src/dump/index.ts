@@ -175,6 +175,7 @@ export async function runDump(baseUrl: string): Promise<void> {
             folder.LibraryOptions?.EnableEmbeddedExtrasTitles,
           enableTrickplayImageExtraction:
             folder.LibraryOptions?.EnableTrickplayImageExtraction,
+          saveLyricsWithMedia: folder.LibraryOptions?.SaveLyricsWithMedia,
           saveTrickplayWithMedia: folder.LibraryOptions?.SaveTrickplayWithMedia,
           metadataSavers: folder.LibraryOptions?.MetadataSavers ?? undefined,
           saveLocalMetadata: folder.LibraryOptions?.SaveLocalMetadata,
