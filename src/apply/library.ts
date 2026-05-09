@@ -1,5 +1,4 @@
 import { logger } from "../lib/logger";
-import { ChangeSetBuilder } from "../lib/changeset";
 import type { JellyfinClient } from "../api/jellyfin.types";
 import type { VirtualFolderConfig } from "../types/config/library";
 import type {
@@ -13,7 +12,7 @@ import {
   mapVirtualFolderConfigToSchema,
   mapVirtualFolderInfoSchemaToAddVirtualFolderDtoSchema,
 } from "../mappers/library";
-import { applyChangeset, diff, Operation, type IChange } from "json-diff-ts";
+import { diff } from "json-diff-ts";
 
 export type LibraryDiff = {
   toCreate?: VirtualFolderInfoSchema[];
@@ -22,11 +21,6 @@ export type LibraryDiff = {
     name: string;
     libraryOptions: LibraryOptionsSchema;
   }[];
-};
-
-type ChangeWithValue = IChange & {
-  embeddedKey?: string | number;
-  value?: unknown;
 };
 
 function resolveFolderId(
@@ -40,22 +34,40 @@ function resolveFolderId(
   );
 }
 
-function resolveChangeName(change: ChangeWithValue): string | undefined {
-  const key: string = change.key;
-  if (key !== "" && Number.isNaN(Number(key))) return key;
-  const embeddedKey: string | number | undefined = change.embeddedKey;
-  if (
-    typeof embeddedKey === "string" &&
-    embeddedKey !== "" &&
-    Number.isNaN(Number(embeddedKey))
-  ) {
-    return embeddedKey;
+function projectDesiredShape(current: unknown, desired: unknown): unknown {
+  if (Array.isArray(desired)) {
+    return current;
   }
-  const value: unknown = change.value;
-  if (value && typeof value === "object" && "Name" in value) {
-    return (value as { Name?: string }).Name;
+
+  if (desired && typeof desired === "object") {
+    const currentObject: Record<string, unknown> =
+      current && typeof current === "object"
+        ? (current as Record<string, unknown>)
+        : {};
+
+    return Object.fromEntries(
+      Object.entries(desired as Record<string, unknown>).map(
+        ([key, desiredValue]: [string, unknown]) => [
+          key,
+          projectDesiredShape(currentObject[key], desiredValue),
+        ],
+      ),
+    );
   }
-  return undefined;
+
+  return current;
+}
+
+function hasLibraryOptionsDiff(
+  current: LibraryOptionsSchema | undefined,
+  desired: LibraryOptionsSchema,
+): boolean {
+  const projectedCurrent: unknown = projectDesiredShape(current, desired);
+  return (
+    diff(projectedCurrent, desired, {
+      treatTypeChangeAsReplace: false,
+    }).length > 0
+  );
 }
 
 export function calculateLibraryDiff(
@@ -106,65 +118,32 @@ export function calculateLibraryDiff(
     }
   }
 
-  const changeSet: IChange[] = new ChangeSetBuilder(
-    diff(current, next, {
-      embeddedObjKeys: { ".": "Name" },
-      treatTypeChangeAsReplace: false,
-    }),
-  )
-    .atomize()
-    .withoutRemoves()
-    .toArray();
-
-  if (changeSet.length === 0) return undefined;
-
-  logger.info(JSON.stringify(changeSet));
-
-  const addChanges: IChange[] = changeSet.filter(
-    (change: IChange) => change.type === Operation.ADD,
-  );
-  const updateChanges: ChangeWithValue[] = changeSet.filter(
-    (change: IChange) => change.type === Operation.UPDATE,
-  ) as ChangeWithValue[];
-
-  const toCreate: VirtualFolderInfoSchema[] | undefined =
-    addChanges.length > 0
-      ? (applyChangeset([], addChanges) as VirtualFolderInfoSchema[])
-      : undefined;
-
-  const nextByName: Map<string, VirtualFolderInfoSchema> = new Map(
-    next
-      .map((folder: VirtualFolderInfoSchema) =>
-        folder.Name ? [folder.Name, folder] : undefined,
-      )
-      .filter(
-        (
-          entry:
-            | [string, VirtualFolderInfoSchema]
-            | undefined
-            | [string, VirtualFolderInfoSchema | undefined],
-        ): entry is [string, VirtualFolderInfoSchema] => Array.isArray(entry),
-      ),
-  );
-
+  const toCreate: VirtualFolderInfoSchema[] = [];
   const toUpdate: NonNullable<LibraryDiff["toUpdate"]> = [];
-  const seenUpdate: Set<string> = new Set();
-
-  for (const change of updateChanges) {
-    const name: string | undefined = resolveChangeName(change);
-    if (!name || seenUpdate.has(name)) continue;
+  for (const desiredFolder of next) {
+    const name: string | undefined = desiredFolder.Name ?? undefined;
+    if (!name) continue;
 
     const currentFolder: VirtualFolderInfoSchema | undefined =
       currentByName.get(name);
-    const desiredFolder: VirtualFolderInfoSchema | undefined =
-      nextByName.get(name);
+    if (!currentFolder) {
+      toCreate.push(desiredFolder as VirtualFolderInfoSchema);
+      continue;
+    }
+
     const existingId: string | undefined = resolveFolderId(currentFolder);
     const libraryOptions: LibraryOptionsSchema | undefined =
-      desiredFolder?.LibraryOptions as LibraryOptionsSchema | undefined;
-
+      desiredFolder.LibraryOptions as LibraryOptionsSchema | undefined;
     if (!existingId || !libraryOptions) continue;
+    if (
+      !hasLibraryOptionsDiff(
+        currentFolder.LibraryOptions as LibraryOptionsSchema | undefined,
+        libraryOptions,
+      )
+    ) {
+      continue;
+    }
 
-    seenUpdate.add(name);
     toUpdate.push({
       id: existingId,
       name,
@@ -172,10 +151,10 @@ export function calculateLibraryDiff(
     });
   }
 
-  if (!toCreate && toUpdate.length === 0) return undefined;
+  if (toCreate.length === 0 && toUpdate.length === 0) return undefined;
 
   return {
-    toCreate,
+    toCreate: toCreate.length > 0 ? toCreate : undefined,
     toUpdate: toUpdate.length > 0 ? toUpdate : undefined,
   };
 }

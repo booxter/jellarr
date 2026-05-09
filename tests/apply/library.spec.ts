@@ -277,6 +277,50 @@ describe("apply/library", () => {
       });
     });
 
+    it("should return update when saveTrickplayWithMedia changes", () => {
+      const currentVirtualFolders: VirtualFolderInfoSchema[] = [
+        {
+          ItemId: "1",
+          Name: "Movies",
+          CollectionType: "movies",
+          LibraryOptions: {
+            PathInfos: [{ Path: "/data/movies" }],
+            SaveTrickplayWithMedia: false,
+          } as LibraryOptionsSchema,
+        },
+      ];
+
+      const desired: LibraryConfig = {
+        virtualFolders: [
+          {
+            name: "Movies",
+            collectionType: "movies",
+            libraryOptions: {
+              pathInfos: [{ path: "/data/movies" }],
+              saveTrickplayWithMedia: true,
+            },
+          },
+        ],
+      };
+
+      const result = calculateLibraryDiff(
+        currentVirtualFolders,
+        desired.virtualFolders as VirtualFolderConfig[],
+      );
+
+      expect(result?.toCreate).toBeUndefined();
+      expect(result?.toUpdate).toEqual([
+        {
+          id: "1",
+          name: "Movies",
+          libraryOptions: {
+            PathInfos: [{ Path: "/data/movies" }],
+            SaveTrickplayWithMedia: true,
+          },
+        },
+      ]);
+    });
+
     it("should return update when typeOptions additions are present", () => {
       const currentVirtualFolders: VirtualFolderInfoSchema[] = [
         {

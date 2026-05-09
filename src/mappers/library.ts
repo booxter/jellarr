@@ -4,10 +4,29 @@ import type {
   VirtualFolderInfoSchema,
 } from "../types/schema/library";
 
+function omitUndefined<T>(value: T): T {
+  if (Array.isArray(value)) {
+    return value.map((item: unknown) => omitUndefined(item)) as T;
+  }
+
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value)
+        .filter(([, entryValue]: [string, unknown]) => entryValue !== undefined)
+        .map(([key, entryValue]: [string, unknown]) => [
+          key,
+          omitUndefined(entryValue),
+        ]),
+    ) as T;
+  }
+
+  return value;
+}
+
 export function mapVirtualFolderConfigToSchema(
   config: VirtualFolderConfig,
 ): Partial<VirtualFolderInfoSchema> {
-  return {
+  return omitUndefined({
     Name: config.name,
     CollectionType: config.collectionType,
     LibraryOptions: {
@@ -38,7 +57,7 @@ export function mapVirtualFolderConfigToSchema(
         config.libraryOptions.automaticRefreshIntervalDays,
       EnableRealtimeMonitor: config.libraryOptions.enableRealtimeMonitor,
     } as LibraryOptionsSchema,
-  };
+  });
 }
 
 export function mapVirtualFolderInfoSchemaToAddVirtualFolderDtoSchema(
