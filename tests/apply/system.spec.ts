@@ -7,6 +7,16 @@
  * - ✅ No-change: true → true, false → false (same value)
  * - ✅ Logging behavior (changes logged vs no-changes not logged)
  *
+ * ## libraryScanFanoutConcurrency (Scalar Integer)
+ * - ✅ Preserve when undefined
+ * - ✅ Change detection and update application
+ * - ✅ No-change detection
+ *
+ * ## parallelImageEncodingLimit (Scalar Integer)
+ * - ✅ Preserve when undefined
+ * - ✅ Change detection and update application
+ * - ✅ No-change detection
+ *
  * ## pluginRepositories (Array)
  * - ✅ Preserve when undefined (populated/empty current states)
  * - ✅ Replace scenarios: empty ↔ populated, single ↔ multiple
@@ -217,6 +227,138 @@ describe("apply/system", () => {
         } as ServerConfigurationSchema;
 
         const desired: SystemConfig = { enableMetrics: false };
+
+        // Act
+        const result: ServerConfigurationSchema | undefined =
+          calculateSystemDiff(current, desired);
+
+        // Assert
+        expect(result).toBeUndefined();
+      });
+    });
+
+    describe("libraryScanFanoutConcurrency (Scalar Integer)", () => {
+      it("should preserve LibraryScanFanoutConcurrency when undefined", () => {
+        // Arrange
+        const current: ServerConfigurationSchema = {
+          LibraryScanFanoutConcurrency: 29,
+          EnableMetrics: false,
+          PluginRepositories: [],
+          TrickplayOptions: undefined,
+        } as ServerConfigurationSchema;
+
+        const desired: SystemConfig = {};
+
+        // Act
+        const result: ServerConfigurationSchema | undefined =
+          calculateSystemDiff(current, desired);
+
+        // Assert
+        expect(result).toBeUndefined();
+      });
+
+      it("should update LibraryScanFanoutConcurrency when it changes", () => {
+        // Arrange
+        const current: ServerConfigurationSchema = {
+          LibraryScanFanoutConcurrency: 29,
+          EnableMetrics: false,
+          PluginRepositories: [],
+          TrickplayOptions: undefined,
+        } as ServerConfigurationSchema;
+
+        const desired: SystemConfig = {
+          libraryScanFanoutConcurrency: 4,
+        };
+
+        // Act
+        const result: ServerConfigurationSchema | undefined =
+          calculateSystemDiff(current, desired);
+
+        // Assert
+        expect(result?.LibraryScanFanoutConcurrency).toBe(4);
+        expect(result?.EnableMetrics).toBe(false);
+        expect(result?.PluginRepositories).toEqual([]);
+        expect(result?.TrickplayOptions).toBeUndefined();
+      });
+
+      it("should not modify LibraryScanFanoutConcurrency when value is the same", () => {
+        // Arrange
+        const current: ServerConfigurationSchema = {
+          LibraryScanFanoutConcurrency: 0,
+          EnableMetrics: false,
+          PluginRepositories: [],
+          TrickplayOptions: undefined,
+        } as ServerConfigurationSchema;
+
+        const desired: SystemConfig = {
+          libraryScanFanoutConcurrency: 0,
+        };
+
+        // Act
+        const result: ServerConfigurationSchema | undefined =
+          calculateSystemDiff(current, desired);
+
+        // Assert
+        expect(result).toBeUndefined();
+      });
+    });
+
+    describe("parallelImageEncodingLimit (Scalar Integer)", () => {
+      it("should preserve ParallelImageEncodingLimit when undefined", () => {
+        // Arrange
+        const current: ServerConfigurationSchema = {
+          ParallelImageEncodingLimit: 32,
+          EnableMetrics: false,
+          PluginRepositories: [],
+          TrickplayOptions: undefined,
+        } as ServerConfigurationSchema;
+
+        const desired: SystemConfig = {};
+
+        // Act
+        const result: ServerConfigurationSchema | undefined =
+          calculateSystemDiff(current, desired);
+
+        // Assert
+        expect(result).toBeUndefined();
+      });
+
+      it("should update ParallelImageEncodingLimit when it changes", () => {
+        // Arrange
+        const current: ServerConfigurationSchema = {
+          ParallelImageEncodingLimit: 32,
+          EnableMetrics: false,
+          PluginRepositories: [],
+          TrickplayOptions: undefined,
+        } as ServerConfigurationSchema;
+
+        const desired: SystemConfig = {
+          parallelImageEncodingLimit: 2,
+        };
+
+        // Act
+        const result: ServerConfigurationSchema | undefined =
+          calculateSystemDiff(current, desired);
+
+        // Assert
+        expect(result?.ParallelImageEncodingLimit).toBe(2);
+        expect(result?.EnableMetrics).toBe(false);
+        expect(result?.PluginRepositories).toEqual([]);
+        expect(result?.TrickplayOptions).toBeUndefined();
+      });
+
+      it("should not modify ParallelImageEncodingLimit when value is the same", () => {
+        // Arrange
+        const current: ServerConfigurationSchema = {
+          ParallelImageEncodingLimit: 0,
+          EnableMetrics: false,
+          PluginRepositories: [],
+          TrickplayOptions: undefined,
+        } as ServerConfigurationSchema;
+
+        const desired: SystemConfig = {
+          parallelImageEncodingLimit: 0,
+        };
 
         // Act
         const result: ServerConfigurationSchema | undefined =

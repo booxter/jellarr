@@ -4,6 +4,7 @@ import type { JellyfinClient } from "../api/jellyfin.types";
 import { mapSystemConfigurationConfigToSchema } from "../mappers/system";
 import { type SystemConfig } from "../types/config/system";
 import { type ServerConfigurationSchema } from "../types/schema/system";
+import { deepEqual } from "fast-equals";
 import { diff, applyChangeset, type IChange } from "json-diff-ts";
 
 export function calculateSystemDiff(
@@ -18,6 +19,22 @@ export function calculateSystemDiff(
       diff(current, next, { treatTypeChangeAsReplace: false }),
     )
       .withKey("ServerName")
+      .withoutRemoves()
+      .atomize()
+      .toArray(),
+
+    ...new ChangeSetBuilder(
+      diff(current, next, { treatTypeChangeAsReplace: false }),
+    )
+      .withKey("LibraryScanFanoutConcurrency")
+      .withoutRemoves()
+      .atomize()
+      .toArray(),
+
+    ...new ChangeSetBuilder(
+      diff(current, next, { treatTypeChangeAsReplace: false }),
+    )
+      .withKey("ParallelImageEncodingLimit")
       .withoutRemoves()
       .atomize()
       .toArray(),
@@ -54,8 +71,14 @@ export function calculateSystemDiff(
     .toArray();
 
   if (patch.length != 0) {
+    const original = structuredClone(current);
+    const updated = applyChangeset(current, patch) as ServerConfigurationSchema;
+    if (deepEqual(updated, original)) {
+      return undefined;
+    }
+
     logger.info(JSON.stringify(patch));
-    return applyChangeset(current, patch) as ServerConfigurationSchema;
+    return updated;
   }
 
   return undefined;

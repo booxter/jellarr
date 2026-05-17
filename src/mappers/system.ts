@@ -40,6 +40,14 @@ export function mapSystemConfigurationConfigToSchema(
     out.ServerName = desired.serverName;
   }
 
+  if (desired.libraryScanFanoutConcurrency !== undefined) {
+    out.LibraryScanFanoutConcurrency = desired.libraryScanFanoutConcurrency;
+  }
+
+  if (desired.parallelImageEncodingLimit !== undefined) {
+    out.ParallelImageEncodingLimit = desired.parallelImageEncodingLimit;
+  }
+
   if (desired.enableMetrics !== undefined) {
     out.EnableMetrics = desired.enableMetrics;
   }

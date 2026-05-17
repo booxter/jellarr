@@ -9,6 +9,8 @@
 
   nullConfig = {
     serverName = null;
+    libraryScanFanoutConcurrency = null;
+    parallelImageEncodingLimit = null;
     enableMetrics = null;
     pluginRepositories = null;
     trickplayOptions = null;
@@ -28,7 +30,17 @@ in [
     enableMetrics = false;
   })
 
+  (assertEq "libraryScanFanoutConcurrency only" (mkSystemConfig (nullConfig // {libraryScanFanoutConcurrency = 0;})) {
+    libraryScanFanoutConcurrency = 0;
+  })
+
+  (assertEq "parallelImageEncodingLimit only" (mkSystemConfig (nullConfig // {parallelImageEncodingLimit = 2;})) {
+    parallelImageEncodingLimit = 2;
+  })
+
   (assertEq "full config" (mkSystemConfig {
+      libraryScanFanoutConcurrency = 4;
+      parallelImageEncodingLimit = 2;
       enableMetrics = true;
       pluginRepositories = [
         {
@@ -43,6 +55,8 @@ in [
         processThreads = 2;
       };
     }) {
+      libraryScanFanoutConcurrency = 4;
+      parallelImageEncodingLimit = 2;
       enableMetrics = true;
       pluginRepositories = [
         {

@@ -47,6 +47,16 @@
         default = null;
         description = "Server name shown in clients.";
       };
+      libraryScanFanoutConcurrency = mkOption {
+        type = nullOr types.int;
+        default = null;
+        description = "Maximum number of parallel tasks during library scans.";
+      };
+      parallelImageEncodingLimit = mkOption {
+        type = nullOr types.int;
+        default = null;
+        description = "Maximum number of image encodings allowed to run in parallel.";
+      };
       enableMetrics = mkOption {
         type = nullOr types.bool;
         default = null;
@@ -84,6 +94,8 @@
   in
     {}
     // optionalAttrs (c ? serverName && c.serverName != null) {inherit (c) serverName;}
+    // optionalAttrs (c ? libraryScanFanoutConcurrency && c.libraryScanFanoutConcurrency != null) {inherit (c) libraryScanFanoutConcurrency;}
+    // optionalAttrs (c ? parallelImageEncodingLimit && c.parallelImageEncodingLimit != null) {inherit (c) parallelImageEncodingLimit;}
     // optionalAttrs (c ? enableMetrics && c.enableMetrics != null) {inherit (c) enableMetrics;}
     // optionalAttrs (c ? pluginRepositories && c.pluginRepositories != null) {
       pluginRepositories = map (repo:

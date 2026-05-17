@@ -29,6 +29,8 @@ describe("SystemConfig", () => {
   it("should validate full system config", () => {
     // Arrange
     const validConfig: z.input<typeof SystemConfigType> = {
+      libraryScanFanoutConcurrency: 0,
+      parallelImageEncodingLimit: 2,
       enableMetrics: true,
       pluginRepositories: [
         {
@@ -244,6 +246,32 @@ describe("SystemConfigType", () => {
     expect(result.success).toBe(true);
     if (result.success) {
       expect(result.data.serverName).toBe("MyServer");
+    }
+  });
+
+  it("should allow libraryScanFanoutConcurrency", () => {
+    const config: z.input<typeof SystemConfigType> = {
+      libraryScanFanoutConcurrency: 0,
+    };
+
+    const result = SystemConfigType.safeParse(config);
+
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.libraryScanFanoutConcurrency).toBe(0);
+    }
+  });
+
+  it("should allow parallelImageEncodingLimit", () => {
+    const config: z.input<typeof SystemConfigType> = {
+      parallelImageEncodingLimit: 0,
+    };
+
+    const result = SystemConfigType.safeParse(config);
+
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.parallelImageEncodingLimit).toBe(0);
     }
   });
 });

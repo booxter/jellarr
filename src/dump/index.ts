@@ -107,6 +107,8 @@ export async function runDump(baseUrl: string): Promise<void> {
 
     system: {
       serverName: systemConfig.ServerName,
+      libraryScanFanoutConcurrency: systemConfig.LibraryScanFanoutConcurrency,
+      parallelImageEncodingLimit: systemConfig.ParallelImageEncodingLimit,
       enableMetrics: systemConfig.EnableMetrics,
       pluginRepositories: systemConfig.PluginRepositories?.map(
         (repo: PluginRepositorySchema) => ({

@@ -26,6 +26,8 @@ export type TrickplayOptionsConfig = z.infer<typeof TrickplayOptionsConfigType>;
 
 export const SystemConfigType: z.ZodObject<{
   serverName: z.ZodOptional<z.ZodString>;
+  libraryScanFanoutConcurrency: z.ZodOptional<z.ZodNumber>;
+  parallelImageEncodingLimit: z.ZodOptional<z.ZodNumber>;
   enableMetrics: z.ZodOptional<z.ZodBoolean>;
   pluginRepositories: z.ZodOptional<
     z.ZodArray<typeof PluginRepositoryConfigType>
@@ -34,6 +36,8 @@ export const SystemConfigType: z.ZodObject<{
 }> = z
   .object({
     serverName: z.string().min(1).optional(),
+    libraryScanFanoutConcurrency: z.number().int().optional(),
+    parallelImageEncodingLimit: z.number().int().optional(),
     enableMetrics: z.boolean().optional(),
     pluginRepositories: z.array(PluginRepositoryConfigType).optional(),
     trickplayOptions: TrickplayOptionsConfigType.optional(),

@@ -14,6 +14,8 @@
  * - ✅ Disabled repository conversion
  *
  * ## mapSystemConfigurationConfigToSchema
+ * - ✅ libraryScanFanoutConcurrency mapping
+ * - ✅ parallelImageEncodingLimit mapping
  * - ✅ enableMetrics mapping (true/false)
  * - ✅ pluginRepositories mapping (populated/empty)
  * - ✅ trickplayOptions mapping (full/partial/empty)
@@ -115,6 +117,38 @@ describe("mappers/system", () => {
   });
 
   describe("mapSystemConfigurationConfigToSchema", () => {
+    it("should map libraryScanFanoutConcurrency to LibraryScanFanoutConcurrency", () => {
+      // Arrange
+      const config: SystemConfig = {
+        libraryScanFanoutConcurrency: 0,
+      };
+
+      // Act
+      const result: Partial<ServerConfigurationSchema> =
+        mapSystemConfigurationConfigToSchema(config);
+
+      // Assert
+      expect(result).toEqual({
+        LibraryScanFanoutConcurrency: 0,
+      });
+    });
+
+    it("should map parallelImageEncodingLimit to ParallelImageEncodingLimit", () => {
+      // Arrange
+      const config: SystemConfig = {
+        parallelImageEncodingLimit: 2,
+      };
+
+      // Act
+      const result: Partial<ServerConfigurationSchema> =
+        mapSystemConfigurationConfigToSchema(config);
+
+      // Assert
+      expect(result).toEqual({
+        ParallelImageEncodingLimit: 2,
+      });
+    });
+
     it("should map enableMetrics to EnableMetrics", () => {
       // Arrange
       const config: SystemConfig = {
