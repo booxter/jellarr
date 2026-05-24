@@ -10,8 +10,6 @@
 
   types = import ./types {inherit lib;};
   processedConfig = types.root.mkConfig cfg.config;
-
-  pkg = import ../package.nix {inherit lib pkgs;};
 in {
   config = lib.mkMerge [
     (lib.mkIf cfg.enable {
@@ -43,7 +41,7 @@ in {
             '';
           serviceConfig = {
             EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
-            ExecStart = lib.getExe pkg;
+            ExecStart = lib.getExe cfg.package;
             Group = cfg.group;
             Type = "oneshot";
             User = cfg.user;
