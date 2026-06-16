@@ -221,6 +221,23 @@ in [
       }
     ])
 
+  (assertEq "policy enableContentDownloading only" (mkUsersConfig [
+      {
+        name = "user";
+        password = "pass";
+        passwordFile = null;
+        policy = {
+          enableContentDownloading = false;
+        };
+      }
+    ]) [
+      {
+        name = "user";
+        password = "pass";
+        policy = {enableContentDownloading = false;};
+      }
+    ])
+
   (assertEq "displayMissingEpisodes only" (mkUsersConfig [
       {
         name = "user";

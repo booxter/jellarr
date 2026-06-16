@@ -255,6 +255,7 @@ describe("mappers/users", () => {
         remoteClientBitrateLimit: 2_000_000,
         enableAllFolders: true,
         enableCollectionManagement: false,
+        enableContentDownloading: false,
       };
 
       // Act
@@ -269,6 +270,7 @@ describe("mappers/users", () => {
         RemoteClientBitrateLimit: 2_000_000,
         EnableAllFolders: true,
         EnableCollectionManagement: false,
+        EnableContentDownloading: false,
       });
     });
 
@@ -297,6 +299,14 @@ describe("mappers/users", () => {
         {
           config: { remoteClientBitrateLimit: 3_500_000 },
           expected: { RemoteClientBitrateLimit: 3_500_000 },
+        },
+        {
+          config: { enableContentDownloading: true },
+          expected: { EnableContentDownloading: true },
+        },
+        {
+          config: { enableContentDownloading: false },
+          expected: { EnableContentDownloading: false },
         },
       ];
 

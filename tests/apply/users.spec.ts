@@ -34,6 +34,7 @@ vi.mock("../../src/mappers/users", () => ({
         isAdministrator?: boolean;
         loginAttemptsBeforeLockout?: number;
         maxActiveSessions?: number;
+        enableContentDownloading?: boolean;
         enabledLibraries?: string[];
       },
       folderNameToIdMap?: Map<string, string>,
@@ -47,6 +48,9 @@ vi.mock("../../src/mappers/users", () => ({
       }
       if (policy.maxActiveSessions !== undefined) {
         result.MaxActiveSessions = policy.maxActiveSessions;
+      }
+      if (policy.enableContentDownloading !== undefined) {
+        result.EnableContentDownloading = policy.enableContentDownloading;
       }
       if (policy.enabledLibraries !== undefined) {
         result.EnabledFolders = policy.enabledLibraries.map((name: string) => {
@@ -614,6 +618,28 @@ describe("calculateUserPoliciesDiff", () => {
       result?.get("user-2-id");
     expect(updatedPolicy?.LoginAttemptsBeforeLockout).toBe(10);
     expect(updatedPolicy?.IsAdministrator).toBe(true);
+  });
+
+  it("should return policies to update when enableContentDownloading changes", () => {
+    const config: UserConfigList = [
+      {
+        name: "existing-user",
+        password: "password",
+        policy: {
+          enableContentDownloading: false,
+        },
+      },
+    ];
+
+    const result: Map<string, UserPolicySchema> | undefined =
+      calculateUserPoliciesDiff(currentUsers, config);
+
+    expect(result).toBeDefined();
+    expect(result?.size).toBe(1);
+    const updatedPolicy: UserPolicySchema | undefined =
+      result?.get("user-1-id");
+    expect(updatedPolicy?.EnableContentDownloading).toBe(false);
+    expect(updatedPolicy?.IsAdministrator).toBe(false);
   });
 
   it("should resolve enabledLibraries to library ids", () => {

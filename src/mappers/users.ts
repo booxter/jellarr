@@ -58,6 +58,10 @@ export function mapUserPolicyConfigToSchema(
     out.EnableCollectionManagement = desired.enableCollectionManagement;
   }
 
+  if (typeof desired.enableContentDownloading !== "undefined") {
+    out.EnableContentDownloading = desired.enableContentDownloading;
+  }
+
   if (
     typeof desired.enabledLibraries !== "undefined" &&
     desired.enabledLibraries.length > 0
