@@ -52,6 +52,9 @@ export function mapVirtualFolderConfigToSchema(
         config.libraryOptions.enableTrickplayImageExtraction,
       SaveLyricsWithMedia: config.libraryOptions.saveLyricsWithMedia,
       SaveTrickplayWithMedia: config.libraryOptions.saveTrickplayWithMedia,
+      UseCustomTagDelimiters: config.libraryOptions.useCustomTagDelimiters,
+      CustomTagDelimiters: config.libraryOptions.customTagDelimiters,
+      DelimiterWhitelist: config.libraryOptions.delimiterWhitelist,
       MetadataSavers: config.libraryOptions.metadataSavers,
       SaveLocalMetadata: config.libraryOptions.saveLocalMetadata,
       AutomaticRefreshIntervalDays:

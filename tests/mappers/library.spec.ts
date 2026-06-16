@@ -176,5 +176,25 @@ describe("mappers/library", () => {
 
       expect(result.LibraryOptions?.SaveLyricsWithMedia).toBe(true);
     });
+
+    it("should map custom tag delimiters when configured", () => {
+      const config: VirtualFolderConfig = {
+        name: "Music",
+        collectionType: "music",
+        libraryOptions: {
+          pathInfos: [{ path: "/data/music" }],
+          useCustomTagDelimiters: true,
+          customTagDelimiters: [";"],
+          delimiterWhitelist: ["AC/DC"],
+        },
+      };
+
+      const result: Partial<VirtualFolderInfoSchema> =
+        mapVirtualFolderConfigToSchema(config);
+
+      expect(result.LibraryOptions?.UseCustomTagDelimiters).toBe(true);
+      expect(result.LibraryOptions?.CustomTagDelimiters).toEqual([";"]);
+      expect(result.LibraryOptions?.DelimiterWhitelist).toEqual(["AC/DC"]);
+    });
   });
 });

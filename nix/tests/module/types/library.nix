@@ -107,6 +107,34 @@ in [
       ];
     })
 
+  (assertEq "custom tag delimiter options" (mkLibraryConfig {
+      virtualFolders = [
+        {
+          name = "Music";
+          collectionType = "music";
+          libraryOptions = {
+            pathInfos = [{path = "/data/music";}];
+            useCustomTagDelimiters = true;
+            customTagDelimiters = [";"];
+            delimiterWhitelist = ["AC/DC"];
+          };
+        }
+      ];
+    }) {
+      virtualFolders = [
+        {
+          name = "Music";
+          collectionType = "music";
+          libraryOptions = {
+            pathInfos = [{path = "/data/music";}];
+            useCustomTagDelimiters = true;
+            customTagDelimiters = [";"];
+            delimiterWhitelist = ["AC/DC"];
+          };
+        }
+      ];
+    })
+
   (assertEq "collectionType movies" (mkLibraryConfig {
       virtualFolders = [
         {

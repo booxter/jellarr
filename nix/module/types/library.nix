@@ -90,6 +90,21 @@
         default = null;
         description = "Save trickplay with media.";
       };
+      useCustomTagDelimiters = mkOption {
+        type = nullOr types.bool;
+        default = null;
+        description = "Use custom tag delimiters.";
+      };
+      customTagDelimiters = mkOption {
+        type = nullOr (types.listOf types.str);
+        default = null;
+        description = "List of custom tag delimiters.";
+      };
+      delimiterWhitelist = mkOption {
+        type = nullOr (types.listOf types.str);
+        default = null;
+        description = "List of values protected from custom tag delimiter splitting.";
+      };
       metadataSavers = mkOption {
         type = nullOr (types.listOf types.str);
         default = null;
@@ -203,6 +218,15 @@
             }
             // optionalAttrs (lo ? saveTrickplayWithMedia && lo.saveTrickplayWithMedia != null) {
               inherit (lo) saveTrickplayWithMedia;
+            }
+            // optionalAttrs (lo ? useCustomTagDelimiters && lo.useCustomTagDelimiters != null) {
+              inherit (lo) useCustomTagDelimiters;
+            }
+            // optionalAttrs (lo ? customTagDelimiters && lo.customTagDelimiters != null) {
+              inherit (lo) customTagDelimiters;
+            }
+            // optionalAttrs (lo ? delimiterWhitelist && lo.delimiterWhitelist != null) {
+              inherit (lo) delimiterWhitelist;
             }
             // optionalAttrs (lo ? metadataSavers && lo.metadataSavers != null) {
               inherit (lo) metadataSavers;

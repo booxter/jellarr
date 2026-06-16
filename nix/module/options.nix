@@ -81,7 +81,7 @@ in {
     };
 
     package = lib.mkOption {
-      default = pkgs.callPackage ../package.nix { };
+      default = pkgs.callPackage ../package.nix {};
       defaultText = lib.literalExpression "pkgs.callPackage ../package.nix { }";
       description = "Package to run for the jellarr service.";
       type = lib.types.package;

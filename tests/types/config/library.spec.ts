@@ -52,6 +52,9 @@ describe("types/config/library", () => {
           enableTrickplayImageExtraction: true,
           saveLyricsWithMedia: true,
           saveTrickplayWithMedia: true,
+          useCustomTagDelimiters: true,
+          customTagDelimiters: [";"],
+          delimiterWhitelist: ["AC/DC"],
           metadataSavers: ["Nfo"],
           saveLocalMetadata: true,
           automaticRefreshIntervalDays: 14,
@@ -81,6 +84,9 @@ describe("types/config/library", () => {
       expect(parsed.libraryOptions.enableTrickplayImageExtraction).toBe(true);
       expect(parsed.libraryOptions.saveLyricsWithMedia).toBe(true);
       expect(parsed.libraryOptions.saveTrickplayWithMedia).toBe(true);
+      expect(parsed.libraryOptions.useCustomTagDelimiters).toBe(true);
+      expect(parsed.libraryOptions.customTagDelimiters).toEqual([";"]);
+      expect(parsed.libraryOptions.delimiterWhitelist).toEqual(["AC/DC"]);
       expect(parsed.libraryOptions.metadataSavers).toEqual(["Nfo"]);
       expect(parsed.libraryOptions.saveLocalMetadata).toBe(true);
       expect(parsed.libraryOptions.automaticRefreshIntervalDays).toBe(14);

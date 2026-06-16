@@ -38,6 +38,9 @@ export const VirtualFolderConfigType: z.ZodObject<{
     enableTrickplayImageExtraction: z.ZodOptional<z.ZodBoolean>;
     saveLyricsWithMedia: z.ZodOptional<z.ZodBoolean>;
     saveTrickplayWithMedia: z.ZodOptional<z.ZodBoolean>;
+    useCustomTagDelimiters: z.ZodOptional<z.ZodBoolean>;
+    customTagDelimiters: z.ZodOptional<z.ZodArray<z.ZodString>>;
+    delimiterWhitelist: z.ZodOptional<z.ZodArray<z.ZodString>>;
     metadataSavers: z.ZodOptional<z.ZodArray<z.ZodString>>;
     saveLocalMetadata: z.ZodOptional<z.ZodBoolean>;
     automaticRefreshIntervalDays: z.ZodOptional<z.ZodNumber>;
@@ -89,6 +92,9 @@ export const VirtualFolderConfigType: z.ZodObject<{
         enableTrickplayImageExtraction: z.boolean().optional(),
         saveLyricsWithMedia: z.boolean().optional(),
         saveTrickplayWithMedia: z.boolean().optional(),
+        useCustomTagDelimiters: z.boolean().optional(),
+        customTagDelimiters: z.array(z.string().min(1)).optional(),
+        delimiterWhitelist: z.array(z.string().min(1)).optional(),
         metadataSavers: z.array(z.string().min(1)).optional(),
         saveLocalMetadata: z.boolean().optional(),
         automaticRefreshIntervalDays: z.number().int().nonnegative().optional(),

@@ -179,6 +179,11 @@ export async function runDump(baseUrl: string): Promise<void> {
             folder.LibraryOptions?.EnableTrickplayImageExtraction,
           saveLyricsWithMedia: folder.LibraryOptions?.SaveLyricsWithMedia,
           saveTrickplayWithMedia: folder.LibraryOptions?.SaveTrickplayWithMedia,
+          useCustomTagDelimiters: folder.LibraryOptions?.UseCustomTagDelimiters,
+          customTagDelimiters:
+            folder.LibraryOptions?.CustomTagDelimiters ?? undefined,
+          delimiterWhitelist:
+            folder.LibraryOptions?.DelimiterWhitelist ?? undefined,
           metadataSavers: folder.LibraryOptions?.MetadataSavers ?? undefined,
           saveLocalMetadata: folder.LibraryOptions?.SaveLocalMetadata,
           automaticRefreshIntervalDays:
