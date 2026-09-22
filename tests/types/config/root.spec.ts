@@ -7,6 +7,25 @@ import {
 } from "../../../src/types/config/root";
 
 describe("RootConfig", () => {
+  it("should validate root config with metadata section", () => {
+    const validConfig: z.input<typeof RootConfigType> = {
+      version: 1,
+      base_url: "http://10.0.0.76:8096",
+      system: {},
+      metadata: {
+        useFileCreationTimeForDateAdded: false,
+      },
+    };
+
+    const result: ZodSafeParseResult<RootConfig> =
+      RootConfigType.safeParse(validConfig);
+
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data).toEqual(validConfig);
+    }
+  });
+
   it("should validate complete root config", () => {
     // Arrange
     const validConfig: z.input<typeof RootConfigType> = {

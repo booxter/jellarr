@@ -79,6 +79,7 @@ def get_jellyfin_data(server, endpoint):
 def validate_initial_state(server):
     branding_config = get_jellyfin_config(server, "/branding")
     encoding_config = get_jellyfin_config(server, "/encoding")
+    metadata_config = get_jellyfin_config(server, "/metadata")
     system_config = get_jellyfin_config(server)
     users = get_jellyfin_data(server, "/Users")
     virtual_folders = get_jellyfin_data(server, "/Library/VirtualFolders")
@@ -106,6 +107,8 @@ def validate_initial_state(server):
             has_entry("HardwareDecodingCodecs", all_of(has_items("h264", "vc1"))),
         ),
     )
+
+    assert_that(metadata_config, has_entry("UseFileCreationTimeForDateAdded", True))
 
     assert_that(
         system_config,
@@ -203,6 +206,14 @@ def validate_encoding_configuration(server):
     )
 
     print("✓ Encoding configuration validated")
+
+
+def validate_metadata_configuration(server):
+    metadata_config = get_jellyfin_config(server, "/metadata")
+
+    assert_that(metadata_config, has_entry("UseFileCreationTimeForDateAdded", False))
+
+    print("✓ Metadata configuration validated")
 
 
 def validate_library_configuration(server):
@@ -349,6 +360,7 @@ def run_sanity_test(server):
     # Assert
     validate_system_configuration(server)
     validate_encoding_configuration(server)
+    validate_metadata_configuration(server)
     validate_library_configuration(server)
     validate_branding_configuration(server)
     validate_user_management(server)

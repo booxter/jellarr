@@ -51,6 +51,7 @@ pkgs.testers.runNixOSTest {
           }
         ];
       };
+      metadata.useFileCreationTimeForDateAdded = false;
       system = {
         enableMetrics = true;
         pluginRepositories = [

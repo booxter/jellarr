@@ -1,6 +1,7 @@
 import type { ServerConfigurationSchema } from "../types/schema/system";
 import type { EncodingOptionsSchema } from "../types/schema/encoding-options";
 import type { NetworkConfigurationSchema } from "../types/schema/network";
+import type { MetadataConfigurationSchema } from "../types/schema/metadata";
 import type {
   VirtualFolderInfoSchema,
   AddVirtualFolderDtoSchema,
@@ -32,6 +33,8 @@ export type GetEncodingConfigurationResponse = ApiResponse;
 export type PostEncodingConfigurationResponse = ApiResponse<void>;
 export type GetNetworkConfigurationResponse = ApiResponse;
 export type PostNetworkConfigurationResponse = ApiResponse<void>;
+export type GetMetadataConfigurationResponse = ApiResponse;
+export type PostMetadataConfigurationResponse = ApiResponse<void>;
 export type GetVirtualFoldersResponse = ApiResponse<VirtualFolderInfoSchema[]>;
 export type PostVirtualFolderResponse = ApiResponse<void>;
 export type GetBrandingConfigurationResponse = ApiResponse;
@@ -58,6 +61,10 @@ export interface JellyfinClient {
   getNetworkConfiguration(): Promise<NetworkConfigurationSchema>;
   updateNetworkConfiguration(
     body: Partial<NetworkConfigurationSchema>,
+  ): Promise<void>;
+  getMetadataConfiguration(): Promise<MetadataConfigurationSchema>;
+  updateMetadataConfiguration(
+    body: Partial<MetadataConfigurationSchema>,
   ): Promise<void>;
   getVirtualFolders(): Promise<VirtualFolderInfoSchema[]>;
   addVirtualFolder(

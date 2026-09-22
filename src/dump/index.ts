@@ -5,6 +5,7 @@ import type {
   PluginRepositorySchema,
 } from "../types/schema/system";
 import type { NetworkConfigurationSchema } from "../types/schema/network";
+import type { MetadataConfigurationSchema } from "../types/schema/metadata";
 import type { EncodingOptionsSchema } from "../types/schema/encoding-options";
 import type {
   VirtualFolderInfoSchema,
@@ -36,6 +37,7 @@ export async function runDump(baseUrl: string): Promise<void> {
   const [
     systemConfig,
     networkConfig,
+    metadataConfig,
     encodingConfig,
     virtualFolders,
     brandingConfig,
@@ -44,6 +46,7 @@ export async function runDump(baseUrl: string): Promise<void> {
   ]: [
     ServerConfigurationSchema,
     NetworkConfigurationSchema,
+    MetadataConfigurationSchema,
     EncodingOptionsSchema,
     VirtualFolderInfoSchema[],
     BrandingOptionsDtoSchema,
@@ -52,6 +55,7 @@ export async function runDump(baseUrl: string): Promise<void> {
   ] = await Promise.all([
     client.getSystemConfiguration(),
     client.getNetworkConfiguration(),
+    client.getMetadataConfiguration(),
     client.getEncodingConfiguration(),
     client.getVirtualFolders(),
     client.getBrandingConfiguration(),
@@ -127,6 +131,11 @@ export async function runDump(baseUrl: string): Promise<void> {
 
     network: {
       knownProxies: networkConfig.KnownProxies,
+    },
+
+    metadata: {
+      useFileCreationTimeForDateAdded:
+        metadataConfig.UseFileCreationTimeForDateAdded,
     },
 
     encoding: {

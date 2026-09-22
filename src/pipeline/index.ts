@@ -2,6 +2,7 @@ import { promises as fs } from "fs";
 import YAML from "yaml";
 import { calculateSystemDiff, applySystem } from "../apply/system";
 import { calculateNetworkDiff, applyNetwork } from "../apply/network";
+import { calculateMetadataDiff, applyMetadata } from "../apply/metadata";
 import {
   calculateEncodingDiff,
   applyEncoding,
@@ -26,6 +27,7 @@ import {
 import type { VirtualFolderInfoSchema } from "../types/schema/library";
 import { type ServerConfigurationSchema } from "../types/schema/system";
 import { type NetworkConfigurationSchema } from "../types/schema/network";
+import { type MetadataConfigurationSchema } from "../types/schema/metadata";
 import { type EncodingOptionsSchema } from "../types/schema/encoding-options";
 import { type BrandingOptionsDtoSchema } from "../types/schema/branding-options";
 import type { UserDtoSchema, UserPolicySchema } from "../types/schema/users";
@@ -105,6 +107,26 @@ export async function runPipeline(path: string): Promise<void> {
       console.log("✓ updated network config");
     } else {
       console.log("✓ network config already up to date");
+    }
+  }
+
+  if (cfg.metadata) {
+    const currentMetadataConfigurationSchema: MetadataConfigurationSchema =
+      await jellyfinClient.getMetadataConfiguration();
+
+    const updatedMetadataConfigurationSchema:
+      | MetadataConfigurationSchema
+      | undefined = calculateMetadataDiff(
+      currentMetadataConfigurationSchema,
+      cfg.metadata,
+    );
+
+    if (updatedMetadataConfigurationSchema) {
+      console.log("→ updating metadata config");
+      await applyMetadata(jellyfinClient, updatedMetadataConfigurationSchema);
+      console.log("✓ updated metadata config");
+    } else {
+      console.log("✓ metadata config already up to date");
     }
   }
 

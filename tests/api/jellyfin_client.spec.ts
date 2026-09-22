@@ -16,6 +16,7 @@ import type {
   LibraryOptionsSchema,
 } from "../../src/types/schema/library";
 import type { EncodingOptionsSchema } from "../../src/types/schema/encoding-options";
+import type { MetadataConfigurationSchema } from "../../src/types/schema/metadata";
 import type { BrandingOptionsDtoSchema } from "../../src/types/schema/branding-options";
 import type {
   UserDtoSchema,
@@ -401,6 +402,83 @@ describe("api/jf Encoding façade", () => {
     await expect(
       jellyfinClient.updateEncodingConfiguration({}),
     ).rejects.toThrow(/POST \/System\/Configuration\/encoding failed/i);
+  });
+});
+
+describe("api/jf Metadata façade", () => {
+  beforeEach((): void => {
+    vi.restoreAllMocks();
+    vi.clearAllMocks();
+  });
+
+  afterEach((): void => {
+    vi.restoreAllMocks();
+  });
+
+  it("gets the metadata configuration", async (): Promise<void> => {
+    const payload: MetadataConfigurationSchema = {
+      UseFileCreationTimeForDateAdded: true,
+    };
+    mockFetchJson(payload);
+    const jellyfinClient: JellyfinClient = createJellyfinClient(
+      baseUrl,
+      apiKey,
+    );
+
+    const result = await jellyfinClient.getMetadataConfiguration();
+
+    expect(result).toEqual(payload);
+    const request: Request = getLastRequest();
+    expect(request.method).toBe("GET");
+    expect(request.url).toMatch(/\/System\/Configuration\/metadata$/);
+  });
+
+  it("updates the metadata configuration", async (): Promise<void> => {
+    mockFetchNoContent();
+    const jellyfinClient: JellyfinClient = createJellyfinClient(
+      baseUrl,
+      apiKey,
+    );
+
+    await jellyfinClient.updateMetadataConfiguration({
+      UseFileCreationTimeForDateAdded: false,
+    });
+
+    const request: Request = getLastRequest();
+    expect(request.method).toBe("POST");
+    expect(request.url).toMatch(/\/System\/Configuration\/metadata$/);
+    expect(request.headers.get("content-type")).toBe("application/json");
+    expect(await request.json()).toEqual({
+      UseFileCreationTimeForDateAdded: false,
+    });
+  });
+
+  it("reports a failed metadata configuration read", async (): Promise<void> => {
+    fetchMock = vi
+      .spyOn(global, "fetch")
+      .mockResolvedValue(new Response("boom", { status: 500 }));
+    const jellyfinClient: JellyfinClient = createJellyfinClient(
+      baseUrl,
+      apiKey,
+    );
+
+    await expect(jellyfinClient.getMetadataConfiguration()).rejects.toThrow(
+      /GET \/System\/Configuration\/metadata failed/i,
+    );
+  });
+
+  it("reports a failed metadata configuration update", async (): Promise<void> => {
+    fetchMock = vi
+      .spyOn(global, "fetch")
+      .mockResolvedValue(new Response("boom", { status: 400 }));
+    const jellyfinClient: JellyfinClient = createJellyfinClient(
+      baseUrl,
+      apiKey,
+    );
+
+    await expect(
+      jellyfinClient.updateMetadataConfiguration({}),
+    ).rejects.toThrow(/POST \/System\/Configuration\/metadata failed/i);
   });
 });
 

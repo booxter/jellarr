@@ -1,6 +1,7 @@
 import type { ServerConfigurationSchema } from "../types/schema/system";
 import type { EncodingOptionsSchema } from "../types/schema/encoding-options";
 import type { NetworkConfigurationSchema } from "../types/schema/network";
+import type { MetadataConfigurationSchema } from "../types/schema/metadata";
 import type {
   VirtualFolderInfoSchema,
   AddVirtualFolderDtoSchema,
@@ -21,6 +22,8 @@ import type {
   PostEncodingConfigurationResponse,
   GetNetworkConfigurationResponse,
   PostNetworkConfigurationResponse,
+  GetMetadataConfigurationResponse,
+  PostMetadataConfigurationResponse,
   GetVirtualFoldersResponse,
   PostVirtualFolderResponse,
   GetBrandingConfigurationResponse,
@@ -149,6 +152,42 @@ export function createJellyfinClient(
       if (res.error) {
         throw new Error(
           `POST /System/Configuration/network failed: ${res.response.status.toString()}`,
+        );
+      }
+    },
+
+    async getMetadataConfiguration(): Promise<MetadataConfigurationSchema> {
+      const res: GetMetadataConfigurationResponse = await client.GET(
+        "/System/Configuration/{key}",
+        {
+          params: { path: { key: "metadata" } },
+        },
+      );
+
+      if (res.error) {
+        throw new Error(
+          `GET /System/Configuration/metadata failed: ${res.response.status.toString()}`,
+        );
+      }
+
+      return res.data as MetadataConfigurationSchema;
+    },
+
+    async updateMetadataConfiguration(
+      body: Partial<MetadataConfigurationSchema>,
+    ): Promise<void> {
+      const res: PostMetadataConfigurationResponse = await client.POST(
+        "/System/Configuration/{key}",
+        {
+          params: { path: { key: "metadata" } },
+          body,
+          headers: { "content-type": "application/json" },
+        },
+      );
+
+      if (res.error) {
+        throw new Error(
+          `POST /System/Configuration/metadata failed: ${res.response.status.toString()}`,
         );
       }
     },
