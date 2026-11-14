@@ -13,9 +13,11 @@ import type {
   UserDtoSchema,
   CreateUserByNameSchema,
   UserPolicySchema,
+  UserConfigurationSchema,
 } from "../types/schema/users";
 import type {
   JellyfinClient,
+  ApiResponse,
   GetSystemConfigurationResponse,
   PostSystemConfigurationResponse,
   GetEncodingConfigurationResponse,
@@ -334,15 +336,15 @@ export function createJellyfinClient(
       userId: string,
       body: UserConfigurationSchema,
     ): Promise<void> {
-      const res = await client.POST("/Users/{userId}/Configuration", {
-        params: { path: { userId } },
+      const res: ApiResponse<void> = await client.POST("/Users/Configuration", {
+        params: { query: { userId } },
         body,
         headers: { "content-type": "application/json" },
       });
 
-      if (res.error) {
+      if (!res.response.ok) {
         throw new Error(
-          `POST /Users/{userId}/Configuration failed: ${res.response.status.toString()}`,
+          `POST /Users/Configuration failed: ${res.response.status.toString()}`,
         );
       }
     },

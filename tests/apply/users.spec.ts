@@ -23,47 +23,6 @@ vi.mock("../../src/lib/logger", () => ({
   },
 }));
 
-vi.mock("../../src/mappers/users", () => ({
-  mapUserConfigToCreateSchema: vi.fn((config: UserConfig) => ({
-    Name: config.name,
-    Password: config.password ?? "mocked-password-from-file",
-  })),
-  mapUserPolicyConfigToSchema: vi.fn(
-    (
-      policy: {
-        isAdministrator?: boolean;
-        loginAttemptsBeforeLockout?: number;
-        maxActiveSessions?: number;
-        enableContentDownloading?: boolean;
-        enabledLibraries?: string[];
-      },
-      folderNameToIdMap?: Map<string, string>,
-    ) => {
-      const result: Record<string, boolean | number | string[]> = {};
-      if (policy.isAdministrator !== undefined) {
-        result.IsAdministrator = policy.isAdministrator;
-      }
-      if (policy.loginAttemptsBeforeLockout !== undefined) {
-        result.LoginAttemptsBeforeLockout = policy.loginAttemptsBeforeLockout;
-      }
-      if (policy.maxActiveSessions !== undefined) {
-        result.MaxActiveSessions = policy.maxActiveSessions;
-      }
-      if (policy.enableContentDownloading !== undefined) {
-        result.EnableContentDownloading = policy.enableContentDownloading;
-      }
-      if (policy.enabledLibraries !== undefined) {
-        result.EnabledFolders = policy.enabledLibraries.map((name: string) => {
-          const id: string | undefined = folderNameToIdMap?.get(name);
-          if (!id) throw new Error(`Missing id for ${name}`);
-          return id;
-        });
-      }
-      return result;
-    },
-  ),
-}));
-
 describe("calculateNewUsersDiff", () => {
   const currentUsers: UserDtoSchema[] = [
     {
@@ -343,7 +302,7 @@ describe("createNewUsers", () => {
       },
       {
         name: "user2",
-        passwordFile: "/secrets/password2",
+        passwordFile: "./test-pass-file",
       },
     ];
 
@@ -358,7 +317,7 @@ describe("createNewUsers", () => {
     });
     expect(createUserSpy).toHaveBeenNthCalledWith(2, {
       Name: "user2",
-      Password: "mocked-password-from-file",
+      Password: "test",
     });
   });
 

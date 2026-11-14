@@ -17,6 +17,7 @@ pkgs.stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   CI = "true";
+  __darwinAllowLocalNetworking = true;
 
   installPhase = ''
     runHook preInstall

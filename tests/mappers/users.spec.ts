@@ -421,7 +421,7 @@ describe("mappers/users", () => {
       const config: UserPolicyConfig = { enabledLibraries: ["Movies"] };
 
       expect(() => mapUserPolicyConfigToSchema(config, folderMap)).toThrowError(
-        /no matching library ids/,
+        /Library 'Movies' not found/,
       );
     });
 
