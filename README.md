@@ -279,6 +279,8 @@ users:
     passwordFile: "/run/secrets/viewer-password"
     audioLanguagePreference: "rus"
     playDefaultAudioTrack: false
+    subtitleLanguagePreference: "rus"
+    subtitleMode: "Smart" # Default, Always, OnlyForced, None, or Smart
 
   # Admin user with policy configuration
   - name: "admin-user"

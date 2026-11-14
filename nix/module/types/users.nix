@@ -79,6 +79,11 @@
         default = null;
         description = "Subtitle language preference code.";
       };
+      subtitleMode = mkOption {
+        type = nullOr (types.enum ["Default" "Always" "OnlyForced" "None" "Smart"]);
+        default = null;
+        description = "When subtitles should be displayed.";
+      };
       audioLanguagePreference = mkOption {
         type = nullOr types.str;
         default = null;
@@ -130,6 +135,7 @@
           // optionalAttrs (user.policy != null) {policy = mkUserPolicyConfig user.policy;}
           // optionalAttrs (user ? displayMissingEpisodes && user.displayMissingEpisodes != null) {inherit (user) displayMissingEpisodes;}
           // optionalAttrs (user ? subtitleLanguagePreference && user.subtitleLanguagePreference != null) {inherit (user) subtitleLanguagePreference;}
+          // optionalAttrs (user ? subtitleMode && user.subtitleMode != null) {inherit (user) subtitleMode;}
           // optionalAttrs (user ? audioLanguagePreference && user.audioLanguagePreference != null) {inherit (user) audioLanguagePreference;}
           // optionalAttrs (user ? playDefaultAudioTrack && user.playDefaultAudioTrack != null) {inherit (user) playDefaultAudioTrack;}
     )

@@ -225,6 +225,7 @@ export async function runDump(baseUrl: string): Promise<void> {
       playDefaultAudioTrack: user.Configuration?.PlayDefaultAudioTrack,
       subtitleLanguagePreference:
         user.Configuration?.SubtitleLanguagePreference,
+      subtitleMode: user.Configuration?.SubtitleMode,
     })),
 
     plugins: pluginsWithConfig,

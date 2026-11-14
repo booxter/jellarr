@@ -24,6 +24,14 @@ export const UserPolicyConfigType: z.ZodObject<{
 
 export type UserPolicyConfig = z.infer<typeof UserPolicyConfigType>;
 
+export const SubtitleModeConfigType: z.ZodEnum<{
+  Default: "Default";
+  Always: "Always";
+  OnlyForced: "OnlyForced";
+  None: "None";
+  Smart: "Smart";
+}> = z.enum(["Default", "Always", "OnlyForced", "None", "Smart"]);
+
 export const UserConfigType: z.ZodObject<{
   name: z.ZodString;
   password: z.ZodOptional<z.ZodString>;
@@ -33,6 +41,7 @@ export const UserConfigType: z.ZodObject<{
   audioLanguagePreference: z.ZodOptional<z.ZodString>;
   playDefaultAudioTrack: z.ZodOptional<z.ZodBoolean>;
   subtitleLanguagePreference: z.ZodOptional<z.ZodString>;
+  subtitleMode: z.ZodOptional<typeof SubtitleModeConfigType>;
   maxActiveSessions: z.ZodOptional<z.ZodNumber>;
 }> = z
   .object({
@@ -44,6 +53,7 @@ export const UserConfigType: z.ZodObject<{
     audioLanguagePreference: z.string().min(1).optional(),
     playDefaultAudioTrack: z.boolean().optional(),
     subtitleLanguagePreference: z.string().min(1).optional(),
+    subtitleMode: SubtitleModeConfigType.optional(),
     maxActiveSessions: z.number().int().min(1).optional(),
   })
   .strict()

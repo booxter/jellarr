@@ -11,8 +11,34 @@ import {
 } from "../../../src/types/config/users";
 
 describe("UserConfig", () => {
+  it.each(["Default", "Always", "OnlyForced", "None", "Smart"] as const)(
+    "accepts subtitle mode %s",
+    (subtitleMode: NonNullable<UserConfig["subtitleMode"]>) => {
+      const user: UserConfig = {
+        name: "viewer",
+        password: "pass",
+        subtitleMode,
+      };
+
+      expect(UserConfigType.parse(user)).toEqual(user);
+    },
+  );
+
+  it.each(["", "always", "invalid"])(
+    "rejects subtitle mode %j",
+    (subtitleMode: string) => {
+      expect(
+        UserConfigType.safeParse({
+          name: "viewer",
+          password: "pass",
+          subtitleMode,
+        }).success,
+      ).toBe(false);
+    },
+  );
+
   it("accepts audio preferences and rejects an empty language", () => {
-    const user = {
+    const user: UserConfig = {
       name: "viewer",
       password: "pass",
       playDefaultAudioTrack: false,

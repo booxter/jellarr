@@ -113,5 +113,9 @@ export function mapUserConfigToConfiguration(
     out.SubtitleLanguagePreference = desired.subtitleLanguagePreference;
   }
 
+  if (typeof desired.subtitleMode !== "undefined") {
+    out.SubtitleMode = desired.subtitleMode;
+  }
+
   return out;
 }

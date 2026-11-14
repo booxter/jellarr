@@ -362,6 +362,39 @@ describe("calculateUserPoliciesDiff", () => {
   });
 
   describe("calculateUserConfigurationsDiff", () => {
+    it.each(["Default", "Always", "OnlyForced", "None", "Smart"] as const)(
+      "updates subtitle mode to %s without changing language preferences",
+      (subtitleMode: NonNullable<UserConfig["subtitleMode"]>) => {
+        const current: UserDtoSchema[] = [
+          {
+            Id: "1",
+            Name: "user",
+            Configuration: {
+              AudioLanguagePreference: "rus",
+              SubtitleLanguagePreference: "eng",
+            },
+          },
+        ];
+        const desired: UserConfigList = [
+          { name: "user", password: "pass", subtitleMode },
+        ];
+        const updated: UserConfigurationSchema | undefined =
+          calculateUserConfigurationsDiff(current, desired)?.get("1");
+
+        expect(updated).toEqual({
+          AudioLanguagePreference: "rus",
+          SubtitleLanguagePreference: "eng",
+          SubtitleMode: subtitleMode,
+        });
+        expect(
+          calculateUserConfigurationsDiff(
+            [{ ...current[0], Configuration: updated }],
+            desired,
+          ),
+        ).toBeUndefined();
+      },
+    );
+
     it.each([
       [{ audioLanguagePreference: "rus" }, "rus", true],
       [{ playDefaultAudioTrack: false }, "eng", false],
@@ -372,7 +405,14 @@ describe("calculateUserPoliciesDiff", () => {
       ],
     ] as const)(
       "updates audio preferences and preserves other settings: %j",
-      (preferences, language, playDefault) => {
+      (
+        preferences: Pick<
+          UserConfig,
+          "audioLanguagePreference" | "playDefaultAudioTrack"
+        >,
+        language: string,
+        playDefault: boolean,
+      ) => {
         const current: UserDtoSchema[] = [
           {
             Id: "1",
@@ -387,9 +427,8 @@ describe("calculateUserPoliciesDiff", () => {
         const desired: UserConfigList = [
           { name: "user", password: "pass", ...preferences },
         ];
-        const updated = calculateUserConfigurationsDiff(current, desired)?.get(
-          "1",
-        );
+        const updated: UserConfigurationSchema | undefined =
+          calculateUserConfigurationsDiff(current, desired)?.get("1");
 
         expect(updated).toEqual({
           AudioLanguagePreference: language,

@@ -7,6 +7,22 @@
   types = import ../../../module/types {inherit lib;};
   inherit (types.users) mkUsersConfig;
 in [
+  (assertEq "subtitle mode" (mkUsersConfig [
+      {
+        name = "viewer";
+        password = "pass";
+        passwordFile = null;
+        policy = null;
+        subtitleMode = "Smart";
+      }
+    ]) [
+      {
+        name = "viewer";
+        password = "pass";
+        subtitleMode = "Smart";
+      }
+    ])
+
   (assertEq "audio preferences" (mkUsersConfig [
       {
         name = "viewer";
