@@ -30,6 +30,8 @@ export const UserConfigType: z.ZodObject<{
   passwordFile: z.ZodOptional<z.ZodString>;
   policy: z.ZodOptional<typeof UserPolicyConfigType>;
   displayMissingEpisodes: z.ZodOptional<z.ZodBoolean>;
+  audioLanguagePreference: z.ZodOptional<z.ZodString>;
+  playDefaultAudioTrack: z.ZodOptional<z.ZodBoolean>;
   subtitleLanguagePreference: z.ZodOptional<z.ZodString>;
   maxActiveSessions: z.ZodOptional<z.ZodNumber>;
 }> = z
@@ -39,6 +41,8 @@ export const UserConfigType: z.ZodObject<{
     passwordFile: z.string().optional(),
     policy: UserPolicyConfigType.optional(),
     displayMissingEpisodes: z.boolean().optional(),
+    audioLanguagePreference: z.string().min(1).optional(),
+    playDefaultAudioTrack: z.boolean().optional(),
     subtitleLanguagePreference: z.string().min(1).optional(),
     maxActiveSessions: z.number().int().min(1).optional(),
   })

@@ -277,6 +277,8 @@ users:
   # Regular user with password file (production recommended)
   - name: "viewer-user"
     passwordFile: "/run/secrets/viewer-password"
+    audioLanguagePreference: "rus"
+    playDefaultAudioTrack: false
 
   # Admin user with policy configuration
   - name: "admin-user"

@@ -79,6 +79,16 @@
         default = null;
         description = "Subtitle language preference code.";
       };
+      audioLanguagePreference = mkOption {
+        type = nullOr types.str;
+        default = null;
+        description = "Audio language preference code.";
+      };
+      playDefaultAudioTrack = mkOption {
+        type = nullOr types.bool;
+        default = null;
+        description = "Play the default audio track regardless of the preferred language.";
+      };
     };
   };
 
@@ -120,6 +130,8 @@
           // optionalAttrs (user.policy != null) {policy = mkUserPolicyConfig user.policy;}
           // optionalAttrs (user ? displayMissingEpisodes && user.displayMissingEpisodes != null) {inherit (user) displayMissingEpisodes;}
           // optionalAttrs (user ? subtitleLanguagePreference && user.subtitleLanguagePreference != null) {inherit (user) subtitleLanguagePreference;}
+          // optionalAttrs (user ? audioLanguagePreference && user.audioLanguagePreference != null) {inherit (user) audioLanguagePreference;}
+          // optionalAttrs (user ? playDefaultAudioTrack && user.playDefaultAudioTrack != null) {inherit (user) playDefaultAudioTrack;}
     )
     cfg;
 in {

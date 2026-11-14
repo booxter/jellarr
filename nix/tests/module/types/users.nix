@@ -7,6 +7,24 @@
   types = import ../../../module/types {inherit lib;};
   inherit (types.users) mkUsersConfig;
 in [
+  (assertEq "audio preferences" (mkUsersConfig [
+      {
+        name = "viewer";
+        password = "pass";
+        passwordFile = null;
+        policy = null;
+        audioLanguagePreference = "rus";
+        playDefaultAudioTrack = false;
+      }
+    ]) [
+      {
+        name = "viewer";
+        password = "pass";
+        audioLanguagePreference = "rus";
+        playDefaultAudioTrack = false;
+      }
+    ])
+
   (assertEq "valid with password" (mkUsersConfig [
       {
         name = "test-jellarr";

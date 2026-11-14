@@ -162,6 +162,8 @@ export function calculateUserConfigurationsDiff(
   desired.forEach((userConfig: UserConfig) => {
     if (
       typeof userConfig.displayMissingEpisodes === "undefined" &&
+      typeof userConfig.audioLanguagePreference === "undefined" &&
+      typeof userConfig.playDefaultAudioTrack === "undefined" &&
       typeof userConfig.subtitleLanguagePreference === "undefined"
     ) {
       return;

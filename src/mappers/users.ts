@@ -97,6 +97,14 @@ export function mapUserConfigToConfiguration(
 ): Partial<UserConfigurationSchema> {
   const out: Partial<UserConfigurationSchema> = {};
 
+  if (typeof desired.audioLanguagePreference !== "undefined") {
+    out.AudioLanguagePreference = desired.audioLanguagePreference;
+  }
+
+  if (typeof desired.playDefaultAudioTrack !== "undefined") {
+    out.PlayDefaultAudioTrack = desired.playDefaultAudioTrack;
+  }
+
   if (typeof desired.displayMissingEpisodes !== "undefined") {
     out.DisplayMissingEpisodes = desired.displayMissingEpisodes;
   }

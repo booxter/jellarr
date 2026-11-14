@@ -362,6 +362,49 @@ describe("calculateUserPoliciesDiff", () => {
   });
 
   describe("calculateUserConfigurationsDiff", () => {
+    it.each([
+      [{ audioLanguagePreference: "rus" }, "rus", true],
+      [{ playDefaultAudioTrack: false }, "eng", false],
+      [
+        { audioLanguagePreference: "rus", playDefaultAudioTrack: false },
+        "rus",
+        false,
+      ],
+    ] as const)(
+      "updates audio preferences and preserves other settings: %j",
+      (preferences, language, playDefault) => {
+        const current: UserDtoSchema[] = [
+          {
+            Id: "1",
+            Name: "user",
+            Configuration: {
+              AudioLanguagePreference: "eng",
+              PlayDefaultAudioTrack: true,
+              SubtitleLanguagePreference: "eng",
+            },
+          },
+        ];
+        const desired: UserConfigList = [
+          { name: "user", password: "pass", ...preferences },
+        ];
+        const updated = calculateUserConfigurationsDiff(current, desired)?.get(
+          "1",
+        );
+
+        expect(updated).toEqual({
+          AudioLanguagePreference: language,
+          PlayDefaultAudioTrack: playDefault,
+          SubtitleLanguagePreference: "eng",
+        });
+        expect(
+          calculateUserConfigurationsDiff(
+            [{ ...current[0], Configuration: updated }],
+            desired,
+          ),
+        ).toBeUndefined();
+      },
+    );
+
     it("should return undefined when no configuration fields provided", () => {
       const current: UserDtoSchema[] = [
         {

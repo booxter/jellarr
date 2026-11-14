@@ -221,6 +221,8 @@ export async function runDump(baseUrl: string): Promise<void> {
         enabledLibraries: resolveEnabledFolders(user.Policy?.EnabledFolders),
       },
       displayMissingEpisodes: user.Configuration?.DisplayMissingEpisodes,
+      audioLanguagePreference: user.Configuration?.AudioLanguagePreference,
+      playDefaultAudioTrack: user.Configuration?.PlayDefaultAudioTrack,
       subtitleLanguagePreference:
         user.Configuration?.SubtitleLanguagePreference,
     })),

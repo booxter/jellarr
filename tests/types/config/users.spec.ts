@@ -11,6 +11,25 @@ import {
 } from "../../../src/types/config/users";
 
 describe("UserConfig", () => {
+  it("accepts audio preferences and rejects an empty language", () => {
+    const user = {
+      name: "viewer",
+      password: "pass",
+      playDefaultAudioTrack: false,
+    };
+
+    expect(
+      UserConfigType.parse({ ...user, audioLanguagePreference: "rus" }),
+    ).toEqual({
+      ...user,
+      audioLanguagePreference: "rus",
+    });
+    expect(
+      UserConfigType.safeParse({ ...user, audioLanguagePreference: "" })
+        .success,
+    ).toBe(false);
+  });
+
   it("should reject user with name only (no password source)", () => {
     // Arrange
     const invalidConfig: z.input<typeof UserConfigType> = {
