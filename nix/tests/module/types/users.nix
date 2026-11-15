@@ -15,7 +15,36 @@
         inherit policy;
       }
     ])).policy;
+  userOrder = orderedLibraries:
+    builtins.head (mkUsersConfig [
+      {
+        name = "viewer";
+        password = "pass";
+        passwordFile = null;
+        policy = null;
+        inherit orderedLibraries;
+      }
+    ]);
 in [
+  (assertEq "ordered libraries" (userOrder ["Фильмы" "Чердак" "Music"]) {
+    name = "viewer";
+    password = "pass";
+    orderedLibraries = ["Фильмы" "Чердак" "Music"];
+  })
+
+  (assertEq "reset library order" (userOrder []) {
+    name = "viewer";
+    password = "pass";
+    orderedLibraries = [];
+  })
+
+  (assertEq "unmanaged library order" (userOrder null) {
+    name = "viewer";
+    password = "pass";
+  })
+
+  (assertThrows "reject empty ordered library" (userOrder [""]))
+
   (assertEq "tag restrictions" (userPolicy {
       allowedTags = ["language_Russian"];
       blockedTags = ["adult"];

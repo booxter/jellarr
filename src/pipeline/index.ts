@@ -184,7 +184,8 @@ export async function runPipeline(path: string): Promise<void> {
       !currentVirtualFolders &&
       cfg.users.some(
         (userConfig: UserConfig) =>
-          typeof userConfig.policy?.enabledLibraries !== "undefined",
+          typeof userConfig.policy?.enabledLibraries !== "undefined" ||
+          typeof userConfig.orderedLibraries !== "undefined",
       )
     ) {
       currentVirtualFolders = await jellyfinClient.getVirtualFolders();
@@ -209,6 +210,7 @@ export async function runPipeline(path: string): Promise<void> {
     const userConfigurationsToUpdate = calculateUserConfigurationsDiff(
       currentUsers,
       cfg.users,
+      currentVirtualFolders,
     );
 
     if (userPoliciesToUpdate) {

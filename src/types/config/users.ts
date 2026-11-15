@@ -41,6 +41,7 @@ export const UserConfigType: z.ZodObject<{
   password: z.ZodOptional<z.ZodString>;
   passwordFile: z.ZodOptional<z.ZodString>;
   policy: z.ZodOptional<typeof UserPolicyConfigType>;
+  orderedLibraries: z.ZodOptional<z.ZodArray<z.ZodString>>;
   displayMissingEpisodes: z.ZodOptional<z.ZodBoolean>;
   audioLanguagePreference: z.ZodOptional<z.ZodString>;
   playDefaultAudioTrack: z.ZodOptional<z.ZodBoolean>;
@@ -53,6 +54,9 @@ export const UserConfigType: z.ZodObject<{
     password: z.string().optional(),
     passwordFile: z.string().optional(),
     policy: UserPolicyConfigType.optional(),
+    orderedLibraries: z
+      .array(z.string().min(1, "Library name is required"))
+      .optional(),
     displayMissingEpisodes: z.boolean().optional(),
     audioLanguagePreference: z.string().min(1).optional(),
     playDefaultAudioTrack: z.boolean().optional(),

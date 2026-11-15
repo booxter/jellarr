@@ -84,6 +84,11 @@
         default = null;
         description = "Show missing episodes for the user.";
       };
+      orderedLibraries = mkOption {
+        type = nullOr (types.listOf types.str);
+        default = null;
+        description = "Library names in home screen order. Omit to preserve the order, or use an empty list to reset it.";
+      };
       subtitleLanguagePreference = mkOption {
         type = nullOr types.str;
         default = null;
@@ -149,6 +154,9 @@
           // optionalAttrs (user.password != null) {inherit (user) password;}
           // optionalAttrs (user.passwordFile != null) {inherit (user) passwordFile;}
           // optionalAttrs (user.policy != null) {policy = mkUserPolicyConfig user.policy;}
+          // optionalAttrs (user ? orderedLibraries && user.orderedLibraries != null) (
+            assert lib.all (library: library != "" || throw "orderedLibraries entries cannot be empty") user.orderedLibraries; {inherit (user) orderedLibraries;}
+          )
           // optionalAttrs (user ? displayMissingEpisodes && user.displayMissingEpisodes != null) {inherit (user) displayMissingEpisodes;}
           // optionalAttrs (user ? subtitleLanguagePreference && user.subtitleLanguagePreference != null) {inherit (user) subtitleLanguagePreference;}
           // optionalAttrs (user ? subtitleMode && user.subtitleMode != null) {inherit (user) subtitleMode;}

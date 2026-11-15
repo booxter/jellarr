@@ -102,8 +102,22 @@ export function mapUserPolicyConfigToSchema(
 
 export function mapUserConfigToConfiguration(
   desired: UserConfig,
+  folderNameToIdMap?: Map<string, string>,
 ): Partial<UserConfigurationSchema> {
   const out: Partial<UserConfigurationSchema> = {};
+
+  if (typeof desired.orderedLibraries !== "undefined") {
+    out.OrderedViews = desired.orderedLibraries.map((name: string): string => {
+      const id: string | undefined = folderNameToIdMap?.get(name);
+      if (!id) {
+        throw new Error(
+          `Library '${name}' not found while resolving orderedLibraries`,
+        );
+      }
+
+      return id;
+    });
+  }
 
   if (typeof desired.audioLanguagePreference !== "undefined") {
     out.AudioLanguagePreference = desired.audioLanguagePreference;

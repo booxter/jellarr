@@ -281,6 +281,7 @@ users:
     playDefaultAudioTrack: false
     subtitleLanguagePreference: "rus"
     subtitleMode: "Smart" # Default, Always, OnlyForced, None, or Smart
+    orderedLibraries: ["Movies", "Shows"]
 
   # Admin user with policy configuration
   - name: "admin-user"
@@ -295,6 +296,10 @@ users:
 
 `policy.enabledLibraries` accepts library names; jellarr resolves them to folder
 IDs when talking to the Jellyfin API.
+
+`orderedLibraries` sets a user's home screen library order by library name. Omit
+it to preserve their order, or use `[]` to reset it. Unlisted libraries follow
+the listed ones; this setting does not change library access.
 
 `policy.allowedTags` limits visible content to items with the specified tags;
 `policy.blockedTags` hides matching items. These filters apply within the user's

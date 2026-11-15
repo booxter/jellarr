@@ -154,22 +154,15 @@ export function calculateUserPoliciesDiff(
 export function calculateUserConfigurationsDiff(
   current: UserDtoSchema[],
   desired: UserConfigList,
+  virtualFolders?: VirtualFolderInfoSchema[],
 ): Map<string, UserConfigurationSchema> | undefined {
   if (desired.length === 0) return undefined;
 
   const userConfigsToUpdate: Map<string, UserConfigurationSchema> = new Map();
+  const folderNameToIdMap: Map<string, string> =
+    buildFolderNameToIdMap(virtualFolders);
 
   desired.forEach((userConfig: UserConfig) => {
-    if (
-      typeof userConfig.displayMissingEpisodes === "undefined" &&
-      typeof userConfig.audioLanguagePreference === "undefined" &&
-      typeof userConfig.playDefaultAudioTrack === "undefined" &&
-      typeof userConfig.subtitleLanguagePreference === "undefined" &&
-      typeof userConfig.subtitleMode === "undefined"
-    ) {
-      return;
-    }
-
     const currentUserDtoSchema: UserDtoSchema | undefined = current.find(
       (curr: UserDtoSchema) => curr.Name === userConfig.name,
     );
@@ -178,7 +171,7 @@ export function calculateUserConfigurationsDiff(
       const currentConfig: UserConfigurationSchema =
         (currentUserDtoSchema.Configuration as UserConfigurationSchema) ?? {};
       const desiredConfig: Partial<UserConfigurationSchema> =
-        mapUserConfigToConfiguration(userConfig);
+        mapUserConfigToConfiguration(userConfig, folderNameToIdMap);
 
       const next: UserConfigurationSchema = {
         ...currentConfig,
