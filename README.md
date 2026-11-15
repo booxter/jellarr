@@ -296,6 +296,11 @@ users:
 `policy.enabledLibraries` accepts library names; jellarr resolves them to folder
 IDs when talking to the Jellyfin API.
 
+`policy.allowedTags` limits visible content to items with the specified tags;
+`policy.blockedTags` hides matching items. These filters apply within the user's
+accessible libraries. Omit either setting to preserve it, or use `[]` to clear
+it.
+
 **Password Security:**
 
 - **plaintext password**: Use `password` field for development/testing only

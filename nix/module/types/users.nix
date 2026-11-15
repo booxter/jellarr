@@ -5,6 +5,16 @@
 
   userPolicyConfigType = types.submodule {
     options = {
+      allowedTags = mkOption {
+        type = nullOr (types.listOf types.str);
+        default = null;
+        description = "Only show items with these tags. An empty list removes the restriction.";
+      };
+      blockedTags = mkOption {
+        type = nullOr (types.listOf types.str);
+        default = null;
+        description = "Hide items with these tags. An empty list removes the restriction.";
+      };
       isAdministrator = mkOption {
         type = nullOr types.bool;
         default = null;
@@ -106,6 +116,12 @@
       else cfg;
   in
     {}
+    // optionalAttrs (c ? allowedTags && c.allowedTags != null) (
+      assert lib.all (tag: tag != "" || throw "allowedTags entries cannot be empty") c.allowedTags; {inherit (c) allowedTags;}
+    )
+    // optionalAttrs (c ? blockedTags && c.blockedTags != null) (
+      assert lib.all (tag: tag != "" || throw "blockedTags entries cannot be empty") c.blockedTags; {inherit (c) blockedTags;}
+    )
     // optionalAttrs (c ? isAdministrator && c.isAdministrator != null) {inherit (c) isAdministrator;}
     // optionalAttrs (c ? loginAttemptsBeforeLockout && c.loginAttemptsBeforeLockout != null) (
       assert c.loginAttemptsBeforeLockout

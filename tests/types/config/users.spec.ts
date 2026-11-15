@@ -405,6 +405,24 @@ describe("UserConfigList", () => {
 });
 
 describe("UserPolicyConfig", () => {
+  it.each(["allowedTags", "blockedTags"] as const)(
+    "accepts tags and empty lists but rejects empty tag names for %s",
+    (field: "allowedTags" | "blockedTags") => {
+      expect(
+        UserPolicyConfigType.parse({ [field]: ["language_Russian"] }),
+      ).toEqual({ [field]: ["language_Russian"] });
+      expect(UserPolicyConfigType.parse({ [field]: [] })).toEqual({
+        [field]: [],
+      });
+      expect(UserPolicyConfigType.safeParse({ [field]: [""] }).success).toBe(
+        false,
+      );
+      expect(
+        UserPolicyConfigType.safeParse({ [field]: "language_Russian" }).success,
+      ).toBe(false);
+    },
+  );
+
   it("should validate empty policy config", () => {
     // Arrange
     const validConfig: z.input<typeof UserPolicyConfigType> = {};

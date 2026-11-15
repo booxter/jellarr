@@ -6,7 +6,40 @@
 }: let
   types = import ../../../module/types {inherit lib;};
   inherit (types.users) mkUsersConfig;
+  userPolicy = policy:
+    (builtins.head (mkUsersConfig [
+      {
+        name = "viewer";
+        password = "pass";
+        passwordFile = null;
+        inherit policy;
+      }
+    ])).policy;
 in [
+  (assertEq "tag restrictions" (userPolicy {
+      allowedTags = ["language_Russian"];
+      blockedTags = ["adult"];
+    }) {
+      allowedTags = ["language_Russian"];
+      blockedTags = ["adult"];
+    })
+
+  (assertEq "clear tag restrictions" (userPolicy {
+      allowedTags = [];
+      blockedTags = [];
+    }) {
+      allowedTags = [];
+      blockedTags = [];
+    })
+
+  (assertEq "unmanaged tag restrictions" (userPolicy {
+    allowedTags = null;
+    blockedTags = null;
+  }) {})
+
+  (assertThrows "reject empty allowed tag" (userPolicy {allowedTags = [""];}))
+  (assertThrows "reject empty blocked tag" (userPolicy {blockedTags = [""];}))
+
   (assertEq "subtitle mode" (mkUsersConfig [
       {
         name = "viewer";

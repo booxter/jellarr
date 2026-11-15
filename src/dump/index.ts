@@ -211,6 +211,8 @@ export async function runDump(baseUrl: string): Promise<void> {
     users: users.map((user: UserDtoSchema) => ({
       name: user.Name ?? "",
       policy: {
+        allowedTags: user.Policy?.AllowedTags ?? undefined,
+        blockedTags: user.Policy?.BlockedTags ?? undefined,
         isAdministrator: user.Policy?.IsAdministrator,
         loginAttemptsBeforeLockout: user.Policy?.LoginAttemptsBeforeLockout,
         enableAllFolders: user.Policy?.EnableAllFolders,

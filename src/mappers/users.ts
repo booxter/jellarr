@@ -34,6 +34,14 @@ export function mapUserPolicyConfigToSchema(
 ): Partial<UserPolicySchema> {
   const out: Partial<UserPolicySchema> = {};
 
+  if (typeof desired.allowedTags !== "undefined") {
+    out.AllowedTags = desired.allowedTags;
+  }
+
+  if (typeof desired.blockedTags !== "undefined") {
+    out.BlockedTags = desired.blockedTags;
+  }
+
   if (typeof desired.isAdministrator !== "undefined") {
     out.IsAdministrator = desired.isAdministrator;
   }
