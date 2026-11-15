@@ -115,6 +115,21 @@
         default = null;
         description = "Save local metadata.";
       };
+      preferredMetadataLanguage = mkOption {
+        type = nullOr types.str;
+        default = null;
+        description = "Preferred language for library metadata, e.g. ru.";
+      };
+      metadataCountryCode = mkOption {
+        type = nullOr types.str;
+        default = null;
+        description = "Country used for library metadata, e.g. RU.";
+      };
+      saveSubtitlesWithMedia = mkOption {
+        type = nullOr types.bool;
+        default = null;
+        description = "Save downloaded subtitles beside media files.";
+      };
       automaticRefreshIntervalDays = mkOption {
         type = nullOr types.int;
         default = null;
@@ -233,6 +248,15 @@
             }
             // optionalAttrs (lo ? saveLocalMetadata && lo.saveLocalMetadata != null) {
               inherit (lo) saveLocalMetadata;
+            }
+            // optionalAttrs (lo ? preferredMetadataLanguage && lo.preferredMetadataLanguage != null) {
+              inherit (lo) preferredMetadataLanguage;
+            }
+            // optionalAttrs (lo ? metadataCountryCode && lo.metadataCountryCode != null) {
+              inherit (lo) metadataCountryCode;
+            }
+            // optionalAttrs (lo ? saveSubtitlesWithMedia && lo.saveSubtitlesWithMedia != null) {
+              inherit (lo) saveSubtitlesWithMedia;
             }
             // optionalAttrs (lo ? automaticRefreshIntervalDays && lo.automaticRefreshIntervalDays != null) {
               inherit (lo) automaticRefreshIntervalDays;

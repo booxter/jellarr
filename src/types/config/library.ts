@@ -43,6 +43,9 @@ export const VirtualFolderConfigType: z.ZodObject<{
     delimiterWhitelist: z.ZodOptional<z.ZodArray<z.ZodString>>;
     metadataSavers: z.ZodOptional<z.ZodArray<z.ZodString>>;
     saveLocalMetadata: z.ZodOptional<z.ZodBoolean>;
+    preferredMetadataLanguage: z.ZodOptional<z.ZodString>;
+    metadataCountryCode: z.ZodOptional<z.ZodString>;
+    saveSubtitlesWithMedia: z.ZodOptional<z.ZodBoolean>;
     automaticRefreshIntervalDays: z.ZodOptional<z.ZodNumber>;
     enableRealtimeMonitor: z.ZodOptional<z.ZodBoolean>;
   }>;
@@ -97,6 +100,9 @@ export const VirtualFolderConfigType: z.ZodObject<{
         delimiterWhitelist: z.array(z.string().min(1)).optional(),
         metadataSavers: z.array(z.string().min(1)).optional(),
         saveLocalMetadata: z.boolean().optional(),
+        preferredMetadataLanguage: z.string().min(1).optional(),
+        metadataCountryCode: z.string().min(1).optional(),
+        saveSubtitlesWithMedia: z.boolean().optional(),
         automaticRefreshIntervalDays: z.number().int().nonnegative().optional(),
         enableRealtimeMonitor: z.boolean().optional(),
       })

@@ -21,6 +21,9 @@ pkgs.testers.runNixOSTest {
               pathInfos = [
                 {path = "/mnt/movies/English";}
               ];
+              preferredMetadataLanguage = "en";
+              metadataCountryCode = "US";
+              saveSubtitlesWithMedia = true;
             };
             name = "test-jellarr";
           }

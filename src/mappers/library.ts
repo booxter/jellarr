@@ -57,6 +57,10 @@ export function mapVirtualFolderConfigToSchema(
       DelimiterWhitelist: config.libraryOptions.delimiterWhitelist,
       MetadataSavers: config.libraryOptions.metadataSavers,
       SaveLocalMetadata: config.libraryOptions.saveLocalMetadata,
+      PreferredMetadataLanguage:
+        config.libraryOptions.preferredMetadataLanguage,
+      MetadataCountryCode: config.libraryOptions.metadataCountryCode,
+      SaveSubtitlesWithMedia: config.libraryOptions.saveSubtitlesWithMedia,
       AutomaticRefreshIntervalDays:
         config.libraryOptions.automaticRefreshIntervalDays,
       EnableRealtimeMonitor: config.libraryOptions.enableRealtimeMonitor,

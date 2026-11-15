@@ -17,29 +17,12 @@ def wait_for_bootstrap(server):
     server.wait_for_unit("jellyfin.service")
     server.wait_for_open_port(8096)
 
-    print("=== Waiting for Jellyfin public API ===")
-    for _ in range(30):
-        try:
-            server.succeed("curl -sf 'http://localhost:8096/System/Info/Public'")
-            print("✓ Jellyfin public API ready")
-            break
-        except:
-            time.sleep(2)
-    else:
-        raise Exception("Jellyfin public API never became ready")
-
     print("=== Waiting for authenticated API ===")
-    for _ in range(30):
-        try:
-            server.succeed(
-                "curl -sf 'http://localhost:8096/System/Configuration' -H 'X-Emby-Token: test-api-key'"
-            )
-            print("✓ Jellyfin authenticated API ready")
-            break
-        except:
-            time.sleep(2)
-    else:
-        raise Exception("Jellyfin authenticated API never became ready")
+    # The public listener starts before Jellyfin finishes its FFmpeg probes.
+    server.wait_until_succeeds(
+        "curl --max-time 5 -sf 'http://localhost:8096/System/Configuration' -H 'X-Emby-Token: test-api-key'",
+        timeout=180,
+    )
 
 
 def jellyfin_api_call(server, endpoint, method="GET", data=None):
@@ -63,7 +46,9 @@ def wait_for_machine(server):
     server.wait_for_unit("multi-user.target")
 
 
-def validate_library_configuration(server, save_trickplay_with_media):
+def validate_library_configuration(
+    server, save_trickplay_with_media, language, country, save_subtitles
+):
     virtual_folders = get_jellyfin_data(server, "/Library/VirtualFolders")
 
     assert_that(
@@ -90,6 +75,10 @@ def validate_library_configuration(server, save_trickplay_with_media):
     )
 
     library_folder = virtual_folders[0]
+    options = library_folder["LibraryOptions"]
+    assert options["PreferredMetadataLanguage"] == language
+    assert options["MetadataCountryCode"] == country
+    assert options["SaveSubtitlesWithMedia"] is save_subtitles
     if save_trickplay_with_media:
         assert library_folder["LibraryOptions"].get("SaveTrickplayWithMedia") is True
     else:
@@ -120,6 +109,9 @@ library:
         pathInfos:
           - path: /mnt/movies/English
         saveTrickplayWithMedia: true
+        preferredMetadataLanguage: ru
+        metadataCountryCode: RU
+        saveSubtitlesWithMedia: false
       name: test-jellarr
 EOF"""
     )
@@ -145,9 +137,11 @@ def run_library_update_test(server):
         "systemctl show jellarr.service --property=ExecMainStatus | grep -q 'ExecMainStatus=0'"
     )
 
-    validate_library_configuration(server, save_trickplay_with_media=False)
+    validate_library_configuration(server, False, "en", "US", True)
     write_updated_library_config(server)
     run_manual_apply(server, "/tmp/jellarr-update-config.yml")
-    validate_library_configuration(server, save_trickplay_with_media=True)
+    validate_library_configuration(server, True, "ru", "RU", False)
+    run_manual_apply(server, "/tmp/jellarr-update-config.yml")
+    validate_library_configuration(server, True, "ru", "RU", False)
 
     print("✅ LIBRARY UPDATE test passed")
